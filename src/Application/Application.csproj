@@ -7,11 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Behaviors\" />
     <Folder Include="DTOs\" />
     <Folder Include="Mappings\" />
-    <Folder Include="UseCases\" />
-    <Folder Include="OperationResults\" />
+    <Folder Include="UseCases\ArticleTypes\Commands\" />
   </ItemGroup>
 
   <ItemGroup>
