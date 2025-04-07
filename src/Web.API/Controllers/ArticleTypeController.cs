@@ -1,4 +1,5 @@
-﻿using Domain.Entities.ArticleTypes;
+﻿using Application.UseCases.ArticleTypes.Queries.GetAll;
+using Domain.Entities.ArticleTypes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -15,8 +16,8 @@ namespace Web.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<ArticleType>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
         {
-            //var operationResult = await _mediator.Send(new GetAllArticleTypesQuery());
-            //return HandleResponse(operationResult);
+            var operationResult = await _mediator.Send(new ArticleTypeGetAllQuery());
+            return HandleResponse(operationResult);
         }
     }
 }

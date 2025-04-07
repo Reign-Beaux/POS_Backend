@@ -11,6 +11,4 @@ namespace Application.UseCases.ArticleTypes.Queries.GetById
                 .WithMessage("Article type ID cannot be empty.");
         }
     }
-    {
-    }
 }
