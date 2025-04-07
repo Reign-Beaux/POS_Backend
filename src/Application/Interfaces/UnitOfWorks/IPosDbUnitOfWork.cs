@@ -8,7 +8,7 @@ namespace Application.Interfaces.UnitOfWorks
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         Task BeginTransactionAsync();
-        Task CommitTransactionAsync();
+        Task CommitTransactionAsync(CancellationToken cancellationToken = default);
         Task RollbackTransactionAsync();
     }
 }

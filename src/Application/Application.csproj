@@ -9,7 +9,8 @@
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Mappings\" />
-    <Folder Include="UseCases\ArticleTypes\Commands\" />
+    <Folder Include="UseCases\ArticleTypes\Commands\Delete\" />
+    <Folder Include="UseCases\ArticleTypes\Commands\Update\" />
   </ItemGroup>
 
   <ItemGroup>

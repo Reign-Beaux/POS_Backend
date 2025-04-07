@@ -29,10 +29,11 @@ namespace Infrastructure.Persistence.UnitOfWorks
             }
         }
 
-        public async Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
             {
+                await _context.SaveChangesAsync(cancellationToken);
                 await _transaction.CommitAsync();
                 await _transaction.DisposeAsync();
                 _transaction = null;
