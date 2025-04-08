@@ -5,8 +5,8 @@
         Task<IEnumerable<ArticleType>> GetAll();
         Task<ArticleType?> GetById(Guid id);
         Task<ArticleType?> GetByName(string name);
-        void Add(ArticleType article);
-        void Update(ArticleType article);
-        void Delete(ArticleType article);
+        void Add(ArticleType article, CancellationToken cancellationToken = default);
+        void Update(ArticleType article, CancellationToken cancellationToken = default);
+        void Delete(ArticleType article, CancellationToken cancellationToken = default);
     }
 }

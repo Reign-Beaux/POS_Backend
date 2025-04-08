@@ -16,7 +16,7 @@ namespace Application.UseCases.ArticleTypes.Commands.Create
                     Name = request.Name,
                     Description = request.Description
                 };
-                _posDb.ArticleTypeRepository.Add(articleType);
+                _posDb.ArticleTypeRepository.Add(articleType, cancellationToken);
                 await _posDb.SaveChangesAsync(cancellationToken);
 
                 return OperationResult.Success();

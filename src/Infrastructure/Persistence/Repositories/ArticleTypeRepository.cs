@@ -17,13 +17,13 @@ namespace Infrastructure.Persistence.Repositories
         public Task<ArticleType?> GetByName(string name)
             => _context.ArticleTypes.SingleOrDefaultAsync(c => c.Name == name);
 
-        public void Add(ArticleType article)
+        public void Add(ArticleType article, CancellationToken cancellationToken = default)
             => _context.ArticleTypes.Add(article);
 
-        public void Update(ArticleType article)
+        public void Update(ArticleType article, CancellationToken cancellationToken = default)
             => _context.ArticleTypes.Update(article);
 
-        public void Delete(ArticleType article)
+        public void Delete(ArticleType article, CancellationToken cancellationToken = default)
             => _context.ArticleTypes.Remove(article);
     }
 }
