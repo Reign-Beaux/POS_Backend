@@ -1,4 +1,5 @@
-﻿using Application.UseCases.ArticleTypes.Commands.Create;
+﻿using Application.OperationResults;
+using Application.UseCases.ArticleTypes.Commands.Create;
 using Application.UseCases.ArticleTypes.Commands.Delete;
 using Application.UseCases.ArticleTypes.Commands.Update;
 using Application.UseCases.ArticleTypes.Queries.GetAll;
@@ -27,7 +28,7 @@ namespace Web.API.Controllers
 
         [HttpGet(routeTemplateId)]
         [ProducesResponseType(typeof(ArticleType), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
             ArticleTypeGetByIdQuery query = new(id);
@@ -45,7 +46,7 @@ namespace Web.API.Controllers
 
         [HttpPut]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Update([FromBody] ArticleTypeUpdateCommand command)
         {
             var operationResult = await _mediator.Send(command);
@@ -54,7 +55,7 @@ namespace Web.API.Controllers
 
         [HttpDelete(routeTemplateId)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> Delete(Guid id)
         {
             var operationResult = await _mediator.Send(new ArticleTypeDeleteCommand(id));
