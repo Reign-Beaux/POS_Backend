@@ -1,10 +1,10 @@
-﻿using Application.OperationResults;
+﻿using Application.DTOs.ArticleTypes;
+using Application.OperationResults;
 using Application.UseCases.ArticleTypes.Commands.Create;
 using Application.UseCases.ArticleTypes.Commands.Delete;
 using Application.UseCases.ArticleTypes.Commands.Update;
 using Application.UseCases.ArticleTypes.Queries.GetAll;
 using Application.UseCases.ArticleTypes.Queries.GetById;
-using Domain.Entities.ArticleTypes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -19,7 +19,7 @@ namespace Web.API.Controllers
         private const string routeTemplateId = "{id:Guid}";
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ArticleType>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ArticleTypeDTO>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAll()
         {
             var operationResult = await _mediator.Send(new ArticleTypeGetAllQuery());
@@ -27,7 +27,7 @@ namespace Web.API.Controllers
         }
 
         [HttpGet(routeTemplateId)]
-        [ProducesResponseType(typeof(ArticleType), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ArticleTypeDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {

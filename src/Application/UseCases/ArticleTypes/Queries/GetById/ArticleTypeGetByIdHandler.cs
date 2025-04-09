@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.UnitOfWorks;
+﻿using Application.DTOs.ArticleTypes;
+using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
+using AutoMapper;
 using Domain.Entities.ArticleTypes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,27 +10,26 @@ namespace Application.UseCases.ArticleTypes.Queries.GetById
 {
     public sealed class ArticleTypeGetByIdHandler(
         ILogger<ArticleTypeGetByIdHandler> logger,
-        IPosDbUnitOfWork posDb) : IRequestHandler<ArticleTypeGetByIdQuery, OperationResult<ArticleType>>
+        IMapper mapper,
+        IPosDbUnitOfWork posDb) : IRequestHandler<ArticleTypeGetByIdQuery, OperationResult<ArticleTypeDTO>>
     {
-        private readonly ILogger<ArticleTypeGetByIdHandler> _logger = logger;
-        private readonly IPosDbUnitOfWork _posDb = posDb;
-
-        public async Task<OperationResult<ArticleType>> Handle(ArticleTypeGetByIdQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<ArticleTypeDTO>> Handle(ArticleTypeGetByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                ArticleType? articleType = await _posDb.ArticleTypeRepository.GetById(request.Id);
+                ArticleType? articleType = await posDb.ArticleTypeRepository.GetById(request.Id);
                 if (articleType == null)
                 {
-                    _logger.LogWarning("Article type with ID {Id} not found", request.Id);
+                    logger.LogWarning("Article type with ID {Id} not found", request.Id);
                     return OperationResult.NotFound($"Article type with ID {request.Id} not found.");
                 }
 
-                return OperationResult.Success(articleType);
+                var response = mapper.Map<ArticleTypeDTO>(articleType);
+                return OperationResult.Success(response);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving article type with ID {Id}", request.Id);
+                logger.LogError(ex, "Error retrieving article type with ID {Id}", request.Id);
                 return OperationResult.InternalServerError(ex.Message);
             }
         }
