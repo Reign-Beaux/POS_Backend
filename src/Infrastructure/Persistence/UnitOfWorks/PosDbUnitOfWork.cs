@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Context;
 using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.ArticleTypes;
+using Domain.Entities.Brands;
 using Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -8,13 +9,15 @@ namespace Infrastructure.Persistence.UnitOfWorks
 {
     public class PosDbUnitOfWork(
         IPosDbContext context,
-        IArticleTypeRepository articleTypeRepository) : IPosDbUnitOfWork
+        IArticleTypeRepository articleTypeRepository,
+        IBrandRepository brandRepository) : IPosDbUnitOfWork
     {
         private readonly IPosDbContext _context = context;
         private IDbContextTransaction? _transaction;
         private bool _disposed = false;
 
         public IArticleTypeRepository ArticleTypeRepository { get; } = articleTypeRepository;
+        public IBrandRepository BrandRepository { get; } = brandRepository;
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
