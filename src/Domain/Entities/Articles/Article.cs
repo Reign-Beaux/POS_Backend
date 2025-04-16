@@ -1,4 +1,7 @@
-﻿namespace Domain.Entities.Articles
+﻿using Domain.Entities.ArticleTypes;
+using Domain.Entities.Brands;
+
+namespace Domain.Entities.Articles
 {
     public class Article : BaseCatalogs
     {
@@ -8,6 +11,8 @@
         public decimal MinStockLevel { get; set; }
         public decimal MaxStockLevel { get; set; }
         public string Barcode { get; set; } = string.Empty;
-        public string UnitOfMeasure { get; set; } = string.Empty;
+
+        public ArticleType? ArticleType { get; set; }
+        public Brand? Brand { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Context;
+using Domain.Entities.Articles;
 using Domain.Entities.ArticleTypes;
 using Domain.Entities.Brands;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ namespace Infrastructure.Persistence.Context
 {
     public class PosDbContext(DbContextOptions<PosDbContext> options) : DbContext(options), IPosDbContext
     {
+        public DbSet<Article> Articles { get; set; }
         public DbSet<ArticleType> ArticleTypes { get; set; }
         public DbSet<Brand> Brands { get; set; }
 

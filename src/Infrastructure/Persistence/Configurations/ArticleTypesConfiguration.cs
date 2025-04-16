@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    public class ArticleTypesConfiguration
+    public class ArticleTypesConfiguration : IEntityTypeConfiguration<ArticleType>
     {
         public void Configure(EntityTypeBuilder<ArticleType> builder)
         {

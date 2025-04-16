@@ -1,12 +1,12 @@
-﻿using Domain.Entities.ArticleTypes;
+﻿using Domain.Entities.Brands;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-    public class BrandsConfiguration
+    public class BrandsConfiguration : IEntityTypeConfiguration<Brand>
     {
-        public void Configure(EntityTypeBuilder<ArticleType> builder)
+        public void Configure(EntityTypeBuilder<Brand> builder)
         {
             builder.ToTable("Brands");
 
