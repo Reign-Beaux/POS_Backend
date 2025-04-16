@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="UseCases\Brands\Commands\" />
-    <Folder Include="UseCases\Brands\Queries\GetById\" />
     <Folder Include="UseCases\Brands\Queries\GetByName\" />
   </ItemGroup>
 
