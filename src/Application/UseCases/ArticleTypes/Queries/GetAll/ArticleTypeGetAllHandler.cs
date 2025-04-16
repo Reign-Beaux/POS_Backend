@@ -11,13 +11,11 @@ namespace Application.UseCases.ArticleTypes.Queries.GetAll
         IMapper mapper,
         IPosDbUnitOfWork posDb) : IRequestHandler<ArticleTypeGetAllQuery, OperationResult<IEnumerable<ArticleTypeDTO>>>
     {
-        private readonly IPosDbUnitOfWork _posDb = posDb;
-
         public async Task<OperationResult<IEnumerable<ArticleTypeDTO>>> Handle(ArticleTypeGetAllQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                IEnumerable<ArticleType> articleTypes = await _posDb.ArticleTypeRepository.GetAll();
+                IEnumerable<ArticleType> articleTypes = await posDb.ArticleTypeRepository.GetAll();
                 IEnumerable<ArticleTypeDTO> articleTypeDTOs = mapper.Map<IEnumerable<ArticleTypeDTO>>(articleTypes);
                 return OperationResult.Success(articleTypeDTOs);
             }

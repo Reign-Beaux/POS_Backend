@@ -8,7 +8,7 @@ namespace Application.Mappings
     {
         public ArticleTypeMappings()
         {
-            CreateMap<ArticleType, ArticleTypeDTO>();
+            CreateMap<ArticleType, ArticleTypeDTO>().ReverseMap();
         }
     }
 }

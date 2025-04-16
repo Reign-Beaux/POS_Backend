@@ -1,4 +1,4 @@
 ﻿namespace Application.DTOs.ArticleTypes
 {
-    public record ArticleTypeDTO : CatalogDTO;
+    public record ArticleTypeDTO() : CatalogDTO;
 }
