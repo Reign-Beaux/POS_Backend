@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class BrandRepository(PosDbContext context) : IBrandRepository
+    public sealed class BrandRepository(PosDbContext context) : IBrandRepository
     {
         private readonly PosDbContext _context = context ?? throw new ArgumentException(nameof(context));
 

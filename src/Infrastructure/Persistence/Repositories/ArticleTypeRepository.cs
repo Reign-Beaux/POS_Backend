@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class ArticleTypeRepository(PosDbContext context) : IArticleTypeRepository
+    public sealed class ArticleTypeRepository(PosDbContext context) : IArticleTypeRepository
     {
         private readonly PosDbContext _context = context ?? throw new ArgumentException(nameof(context));
 

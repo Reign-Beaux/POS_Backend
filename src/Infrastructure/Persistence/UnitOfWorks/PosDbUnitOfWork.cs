@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Context;
 using Application.Interfaces.UnitOfWorks;
+using Domain.Entities.Articles;
 using Domain.Entities.ArticleTypes;
 using Domain.Entities.Brands;
 using Infrastructure.Persistence.Context;
@@ -9,6 +10,7 @@ namespace Infrastructure.Persistence.UnitOfWorks
 {
     public class PosDbUnitOfWork(
         IPosDbContext context,
+        IArticleRepository articleRepository,
         IArticleTypeRepository articleTypeRepository,
         IBrandRepository brandRepository) : IPosDbUnitOfWork
     {
@@ -16,6 +18,7 @@ namespace Infrastructure.Persistence.UnitOfWorks
         private IDbContextTransaction? _transaction;
         private bool _disposed = false;
 
+        public IArticleRepository ArticleRepository { get; } = articleRepository;
         public IArticleTypeRepository ArticleTypeRepository { get; } = articleTypeRepository;
         public IBrandRepository BrandRepository { get; } = brandRepository;
 
