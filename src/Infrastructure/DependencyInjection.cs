@@ -2,6 +2,7 @@
 using Application.Interfaces.Context;
 using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.ArticleTypes;
+using Domain.Entities.Brands;
 using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.UnitOfWorks;
@@ -36,6 +37,7 @@ namespace Infrastructure
             services.AddScoped<IPosDbUnitOfWork, PosDbUnitOfWork>();
 
             services.AddScoped<IArticleTypeRepository, ArticleTypeRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
 
             return services;
         }

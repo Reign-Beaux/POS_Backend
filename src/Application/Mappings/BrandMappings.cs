@@ -8,7 +8,7 @@ namespace Application.Mappings
     {
         public BrandMappings()
         {
-            CreateMap<Brand, BrandDTO>().ReverseMap();
+            CreateMap<Brand, BrandDTO>();
         }
     }
 }
