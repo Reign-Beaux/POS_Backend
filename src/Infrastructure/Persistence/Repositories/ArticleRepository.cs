@@ -9,7 +9,10 @@ namespace Infrastructure.Persistence.Repositories
         private readonly PosDbContext _context = context ?? throw new ArgumentException(nameof(context));
 
         public async Task<IEnumerable<Article>> GetAll()
-            => await _context.Articles.ToListAsync();
+            => await _context.Articles
+                .Include(a => a.ArticleType)
+                .Include(a => a.Brand)
+                .ToListAsync();
 
         public Task<Article?> GetById(Guid id)
             => _context.Articles.SingleOrDefaultAsync(c => c.Id == id);
