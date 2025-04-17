@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
+using Domain.Entities.ArticleTypes;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -13,16 +14,18 @@ namespace Application.UseCases.ArticleTypes.Commands.Update
         {
             try
             {
-                var articleType = await posDb.ArticleTypeRepository.GetById(request.Id);
+                ArticleType? articleType = await posDb.ArticleTypeRepository.GetById(request.Id);
                 if (articleType == null)
                 {
                     logger.LogWarning("Error updating article type with ID {Id}", request.Id);
                     return OperationResult.NotFound("Article type not found.");
                 }
+
                 articleType.Name = request.Name;
                 articleType.Description = request.Description;
                 posDb.ArticleTypeRepository.Update(articleType, cancellationToken);
                 await posDb.SaveChangesAsync(cancellationToken);
+
                 return OperationResult.Success();
             }
             catch (Exception ex)

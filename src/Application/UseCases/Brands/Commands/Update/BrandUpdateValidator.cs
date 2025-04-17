@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.UseCases.ArticleTypes.Commands.Create
+namespace Application.UseCases.Brands.Commands.Update
 {
-    public class ArticleTypeCreateValidator : AbstractValidator<ArticleTypeCreateCommand>
+    public class BrandUpdateValidator : AbstractValidator<BrandUpdateCommand>
     {
-        public ArticleTypeCreateValidator()
+        public BrandUpdateValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty()

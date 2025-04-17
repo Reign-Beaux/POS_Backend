@@ -1,22 +1,22 @@
 ﻿using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
-using Domain.Entities.ArticleTypes;
+using Domain.Entities.Brands;
 using MediatR;
 
-namespace Application.UseCases.ArticleTypes.Commands.Create
+namespace Application.UseCases.Brands.Commands.Create
 {
-    public sealed class ArticleTypeCreateHandler(IPosDbUnitOfWork posDb) : IRequestHandler<ArticleTypeCreateCommand, OperationResult<Unit>>
+    public sealed class BrandCreateHandler(IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Unit>>
     {
-        public async Task<OperationResult<Unit>> Handle(ArticleTypeCreateCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Unit>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                ArticleType articleType = new()
+                Brand brand = new()
                 {
                     Name = request.Name,
                     Description = request.Description
                 };
-                posDb.ArticleTypeRepository.Add(articleType, cancellationToken);
+                posDb.BrandRepository.Add(brand, cancellationToken);
                 await posDb.SaveChangesAsync(cancellationToken);
 
                 return OperationResult.Success();

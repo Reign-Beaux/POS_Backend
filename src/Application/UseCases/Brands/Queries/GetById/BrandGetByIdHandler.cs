@@ -8,8 +8,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.UseCases.Brands.Queries.GetById
 {
-    public sealed class BradGetByIdHandler(
-        ILogger<BradGetByIdHandler> logger,
+    public sealed class BrandGetByIdHandler(
+        ILogger<BrandGetByIdHandler> logger,
         IMapper mapper,
         IPosDbUnitOfWork posDb) : IRequestHandler<BrandGetByIdQuery, OperationResult<BrandDTO>>
     {
