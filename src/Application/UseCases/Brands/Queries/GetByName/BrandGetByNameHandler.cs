@@ -29,7 +29,7 @@ namespace Application.UseCases.Brands.Queries.GetByName
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error retrieving brand with ID {Id}", request.Id);
+                logger.LogError(ex, "Error retrieving brand with Name {Name}", request.Name);
                 return OperationResult.InternalServerError(ex.Message);
             }
         }
