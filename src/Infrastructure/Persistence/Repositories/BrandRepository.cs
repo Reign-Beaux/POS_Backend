@@ -9,10 +9,10 @@ namespace Infrastructure.Persistence.Repositories
         private readonly PosDbContext _context = context ?? throw new ArgumentException(nameof(context));
 
         public async Task<IEnumerable<Brand>> GetAll()
-            => await _context.Brands.ToListAsync();
+            => await _context.Brands.Where(brand => !brand.IsDeleted).ToListAsync();
 
         public async Task<Brand?> GetById(Guid id)
-            => await _context.Brands.SingleOrDefaultAsync(c => c.Id == id);
+            => await _context.Brands.SingleOrDefaultAsync(brand => brand.Id == id && !brand.IsDeleted);
 
         public Task<Brand?> GetByName(string name)
             => _context.Brands.SingleOrDefaultAsync(c => c.Name == name);

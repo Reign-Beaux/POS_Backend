@@ -3,15 +3,15 @@ using System.Net;
 
 namespace Application.OperationResults
 {
-    public class OperationResult<TValue>(bool isSuccess = true, TValue? value = default, ErrorDetails? problemDetails = null)
+    public class OperationResult<TValue>(bool isSuccess = true, TValue? value = default, ErrorDetails? errorDetails = null)
     {
         public bool IsSuccess { get; } = isSuccess;
         public TValue? Value { get; } = value;
-        public ErrorDetails? ProblemDetails { get; } = problemDetails;
+        public ErrorDetails? ErrorDetails { get; } = errorDetails;
 
         public static implicit operator OperationResult<TValue>(OperationResult<Unit> unitResult)
         {
-            return new OperationResult<TValue>(unitResult.IsSuccess, default, unitResult.ProblemDetails);
+            return new OperationResult<TValue>(unitResult.IsSuccess, default, unitResult.ErrorDetails);
         }
     }
 
@@ -23,12 +23,12 @@ namespace Application.OperationResults
         public static OperationResult<Unit> Success()
             => new();
 
-        public static OperationResult<Unit> Failure(ErrorDetails problemDetails)
-            => new(isSuccess: false, problemDetails: problemDetails);
+        public static OperationResult<Unit> Failure(ErrorDetails errorDetails)
+            => new(isSuccess: false, errorDetails: errorDetails);
 
         public static OperationResult<Unit> Validations(List<ValidationError> errors)
         {
-            var problemDetails = new ErrorDetails
+            var errorDetails = new ErrorDetails
             {
                 Status = HttpStatusCode.BadRequest,
                 Title = "Validation Failed",
@@ -36,22 +36,22 @@ namespace Application.OperationResults
                 Errors = errors
             };
 
-            return Failure(problemDetails);
+            return Failure(errorDetails);
         }
 
         public static OperationResult<Unit> BadRequest(string message)
-            => Failure(CreateProblemDetails(HttpStatusCode.BadRequest, title: "Bad Request", message));
+            => Failure(CreateErrorDetails(HttpStatusCode.BadRequest, title: "Bad Request", message));
 
         public static OperationResult<Unit> NotFound(string message)
-            => Failure(CreateProblemDetails(HttpStatusCode.NotFound, title: "Not Found", message));
+            => Failure(CreateErrorDetails(HttpStatusCode.NotFound, title: "Not Found", message));
 
         public static OperationResult<Unit> InternalServerError(string message)
-            => Failure(CreateProblemDetails(HttpStatusCode.InternalServerError, title: "Internal Server Error", message));
+            => Failure(CreateErrorDetails(HttpStatusCode.InternalServerError, title: "Internal Server Error", message));
 
         public static OperationResult<Unit> Unauthorized(string message)
-            => Failure(CreateProblemDetails(HttpStatusCode.Unauthorized, title: "Unauthorized", message));
+            => Failure(CreateErrorDetails(HttpStatusCode.Unauthorized, title: "Unauthorized", message));
 
-        private static ErrorDetails CreateProblemDetails(HttpStatusCode status, string title, string message)
+        private static ErrorDetails CreateErrorDetails(HttpStatusCode status, string title, string message)
         {
             return new()
             {

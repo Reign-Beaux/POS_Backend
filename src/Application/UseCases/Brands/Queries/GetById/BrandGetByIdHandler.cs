@@ -23,6 +23,7 @@ namespace Application.UseCases.Brands.Queries.GetById
                     logger.LogWarning("Brand with ID {Id} not found", request.Id);
                     return OperationResult.NotFound($"Brand with ID {request.Id} not found.");
                 }
+
                 var response = mapper.Map<BrandDTO>(brand);
                 return OperationResult.Success(response);
             }

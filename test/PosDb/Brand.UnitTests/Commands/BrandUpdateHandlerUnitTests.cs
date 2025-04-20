@@ -70,8 +70,8 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails.Should().NotBeNull();
-            result.ProblemDetails!.Status.Should().Be(HttpStatusCode.NotFound);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Status.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+            result.ErrorDetails!.Errors.Should().ContainSingle(e =>
                 e.PropertyName == "Name" && e.ErrorMessage == "Name is required.");
         }
 
@@ -100,7 +100,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+            result.ErrorDetails!.Errors.Should().ContainSingle(e =>
                 e.PropertyName == "Description" && e.ErrorMessage == "Description is required.");
         }
 
@@ -115,9 +115,9 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails!.Errors.Should().Contain(e =>
+            result.ErrorDetails!.Errors.Should().Contain(e =>
                 e.PropertyName == "Name" && e.ErrorMessage == "Name is required.");
-            result.ProblemDetails!.Errors.Should().Contain(e =>
+            result.ErrorDetails!.Errors.Should().Contain(e =>
                 e.PropertyName == "Description" && e.ErrorMessage == "Description is required.");
         }
 
@@ -132,7 +132,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+            result.ErrorDetails!.Errors.Should().ContainSingle(e =>
                 e.PropertyName == "Name" && e.ErrorMessage == "Name must not exceed 64 characters.");
         }
 
@@ -147,7 +147,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+            result.ErrorDetails!.Errors.Should().ContainSingle(e =>
                 e.PropertyName == "Description" && e.ErrorMessage == "Description must not exceed 256 characters.");
         }
     }

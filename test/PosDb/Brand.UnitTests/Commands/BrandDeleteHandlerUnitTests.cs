@@ -1,5 +1,4 @@
-﻿using Application.Behaviors;
-using Application.Interfaces.UnitOfWorks;
+﻿using Application.Interfaces.UnitOfWorks;
 using Application.UseCases.Brands.Commands.Delete;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
@@ -27,7 +26,6 @@ namespace Brands.UnitTests.Commands
 
             services.AddScoped(_ => _mockPosDbUnitOfWork.Object);
             services.AddScoped(_ => _mockLogger.Object);
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             var provider = services.BuildServiceProvider();
             _mediator = provider.GetRequiredService<IMediator>();
@@ -49,7 +47,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.ProblemDetails.Should().BeNull();
+            result.ErrorDetails.Should().BeNull();
         }
 
         [Fact]
@@ -66,9 +64,9 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails.Should().NotBeNull();
-            result.ProblemDetails!.Status.Should().Be(HttpStatusCode.NotFound);
-            result.ProblemDetails.Message.Should().Be("Brand not found.");
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Status.Should().Be(HttpStatusCode.NotFound);
+            result.ErrorDetails.Message.Should().Be("Brand not found.");
         }
 
         [Fact]
@@ -85,9 +83,9 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ProblemDetails.Should().NotBeNull();
-            result.ProblemDetails!.Status.Should().Be(HttpStatusCode.InternalServerError);
-            result.ProblemDetails.Message.Should().Be("Unexpected error");
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Status.Should().Be(HttpStatusCode.InternalServerError);
+            result.ErrorDetails.Message.Should().Be("Unexpected error");
         }
     }
 }

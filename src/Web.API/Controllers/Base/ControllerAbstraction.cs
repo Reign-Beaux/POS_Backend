@@ -23,7 +23,7 @@ namespace Web.API.Controllers.Base
                 { HttpStatusCode.Unauthorized, Unauthorized }
             };
 
-            return failureDictionary[operationResult.ProblemDetails!.Status](operationResult.ProblemDetails!);
+            return failureDictionary[operationResult.ErrorDetails!.Status](operationResult.ErrorDetails!);
         }
     }
 }
