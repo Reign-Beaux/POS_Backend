@@ -7,8 +7,8 @@ using Microsoft.Extensions.Logging;
 namespace Application.UseCases.Brands.Commands.Delete
 {
     public sealed class BrandDeleteHandler(
-        IPosDbUnitOfWork pos,
-        ILogger<BrandDeleteHandler> logger) : IRequestHandler<BrandDeleteCommand, OperationResult<Unit>>
+        ILogger<BrandDeleteHandler> logger,
+        IPosDbUnitOfWork pos) : IRequestHandler<BrandDeleteCommand, OperationResult<Unit>>
     {
         public async Task<OperationResult<Unit>> Handle(BrandDeleteCommand request, CancellationToken cancellationToken)
         {
