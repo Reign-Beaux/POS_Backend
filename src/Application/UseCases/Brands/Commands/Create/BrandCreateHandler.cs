@@ -2,10 +2,13 @@
 using Application.OperationResults;
 using Domain.Entities.Brands;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Application.UseCases.Brands.Commands.Create
 {
-    public sealed class BrandCreateHandler(IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Unit>>
+    public sealed class BrandCreateHandler(
+        ILogger<BrandCreateHandler> logger,
+        IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Unit>>
     {
         public async Task<OperationResult<Unit>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
         {
@@ -23,6 +26,7 @@ namespace Application.UseCases.Brands.Commands.Create
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error creating brand with name {Name}", request.Name);
                 return OperationResult.InternalServerError(ex.Message);
             }
         }
