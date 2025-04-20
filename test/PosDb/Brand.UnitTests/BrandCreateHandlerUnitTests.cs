@@ -1,13 +1,7 @@
 ﻿using Application.Behaviors;
 using Application.Interfaces.UnitOfWorks;
 using Application.UseCases.Brands.Commands.Create;
-using AutoMapper;
 using Domain.Entities.Brands;
-using FluentAssertions;
-using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 
 namespace Brands.UnitTests
 {
