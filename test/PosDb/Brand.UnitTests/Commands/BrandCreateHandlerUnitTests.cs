@@ -11,7 +11,6 @@ namespace Brands.UnitTests.Commands
     {
         private readonly Mock<IBrandRepository> _mockBrandRepository = new();
         private readonly Mock<ILogger<BrandCreateHandler>> _mockLogger = new();
-        private readonly Mock<IMapper> _mockMapper = new();
         private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
 
         private readonly IMediator _mediator;
@@ -28,7 +27,6 @@ namespace Brands.UnitTests.Commands
 
             services.AddScoped(_ => _mockPosDbUnitOfWork.Object);
             services.AddScoped(_ => _mockLogger.Object);
-            services.AddScoped(_ => _mockMapper.Object);
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
 
@@ -45,10 +43,6 @@ namespace Brands.UnitTests.Commands
         {
             // Arrange
             var command = new BrandCreateCommand("Test Brand", "Test Description");
-
-            _mockMapper
-                .Setup(m => m.Map<Brand>(It.IsAny<BrandCreateCommand>()))
-                .Returns(new Brand { Name = command.Name, Description = command.Description });
 
             _mockPosDbUnitOfWork
                 .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))

@@ -15,7 +15,7 @@ namespace Infrastructure.Persistence.Repositories
             => await _context.Brands.SingleOrDefaultAsync(brand => brand.Id == id && !brand.IsDeleted);
 
         public Task<Brand?> GetByName(string name)
-            => _context.Brands.SingleOrDefaultAsync(c => c.Name == name);
+            => _context.Brands.SingleOrDefaultAsync(brand => brand.Name == name && !brand.IsDeleted);
 
         public void Add(Brand brand, CancellationToken cancellationToken = default)
             => _context.Brands.Add(brand);
