@@ -3,6 +3,7 @@ using Application.Interfaces.UnitOfWorks;
 using Application.UseCases.Brands.Commands.Create;
 using AutoMapper;
 using Domain.Entities.Brands;
+using FluentAssertions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,7 +44,7 @@ namespace Brands.UnitTests
          * Lo que debe regresar
          */
         [Fact]
-        public async Task BrandCreateHandler_WhenAllIsOk_ShouldReturnSuccess()
+        public async Task WhenAllIsOk_ShouldReturnSuccess()
         {
             // Arrange
             var command = new BrandCreateCommand("Test Brand", "Test Description");
@@ -60,6 +61,98 @@ namespace Brands.UnitTests
 
             // Assert
             Assert.True(result.IsSuccess);
+        }
+
+
+        [Fact]
+        public async Task WhenNameIsEmpty_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand("", "Test Description");
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ProblemDetails.Should().NotBeNull();
+            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+                e.PropertyName == "Name" &&
+                e.ErrorMessage == "Name is required.");
+        }
+
+        [Fact]
+        public async Task WhenDescriptionIsEmpty_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand("Test Brand", "");
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ProblemDetails.Should().NotBeNull();
+            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+                e.PropertyName == "Description" &&
+                e.ErrorMessage == "Description is required.");
+        }
+
+        [Fact]
+        public async Task WhenNameAndDescriptionAreEmpty_ShouldReturnValidationErrors()
+        {
+            // Arrange
+            var command = new BrandCreateCommand("", "");
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ProblemDetails.Should().NotBeNull();
+            result.ProblemDetails!.Errors.Should().Contain(e =>
+                e.PropertyName == "Name" &&
+                e.ErrorMessage == "Name is required.");
+
+            result.ProblemDetails!.Errors.Should().Contain(e =>
+                e.PropertyName == "Description" &&
+                e.ErrorMessage == "Description is required.");
+        }
+
+        [Fact]
+        public async Task WhenNameExceedsMaxLength_ShouldReturnValidationError()
+        {
+            // Arrange
+            var longName = new string('A', 65);
+            var command = new BrandCreateCommand(longName, "Valid Description");
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ProblemDetails.Should().NotBeNull();
+            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+                e.PropertyName == "Name" &&
+                e.ErrorMessage == "Name must not exceed 64 characters.");
+        }
+
+        [Fact]
+        public async Task WhenDescriptionExceedsMaxLength_ShouldReturnValidationError()
+        {
+            // Arrange
+            var longDescription = new string('B', 257);
+            var command = new BrandCreateCommand("Valid Name", longDescription);
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ProblemDetails.Should().NotBeNull();
+            result.ProblemDetails!.Errors.Should().ContainSingle(e =>
+                e.PropertyName == "Description" &&
+                e.ErrorMessage == "Description must not exceed 256 characters.");
         }
     }
 }
