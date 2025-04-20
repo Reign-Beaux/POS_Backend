@@ -55,6 +55,7 @@ namespace Brands.UnitTests.Commands
 
             // Assert
             result.IsSuccess.Should().BeTrue();
+            result.ErrorDetails.Should().BeNull();
         }
 
         [Fact]

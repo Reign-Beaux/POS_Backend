@@ -66,7 +66,7 @@ namespace Brands.UnitTests.Queries
             var result = await _mediator.Send(command);
 
             // Assert
-            Assert.True(result.IsSuccess);
+            result.IsSuccess.Should().BeTrue();
         }
 
         [Fact]
