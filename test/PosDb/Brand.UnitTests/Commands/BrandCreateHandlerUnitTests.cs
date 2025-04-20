@@ -46,11 +46,12 @@ namespace Brands.UnitTests.Commands
             // Arrange
             var command = new BrandCreateCommand("Test Brand", "Test Description");
 
-            _mockMapper.Setup(m => m.Map<Brand>(It.IsAny<BrandCreateCommand>()))
+            _mockMapper
+                .Setup(m => m.Map<Brand>(It.IsAny<BrandCreateCommand>()))
                 .Returns(new Brand { Name = command.Name, Description = command.Description });
 
-            _mockBrandRepository.Setup(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()));
-            _mockPosDbUnitOfWork.Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+            _mockPosDbUnitOfWork
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(1);
 
             // Act
@@ -59,6 +60,9 @@ namespace Brands.UnitTests.Commands
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.ErrorDetails.Should().BeNull();
+
+            _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
 
