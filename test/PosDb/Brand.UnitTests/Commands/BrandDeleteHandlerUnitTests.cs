@@ -5,7 +5,7 @@ using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace Brands.UnitTests
+namespace Brands.UnitTests.Commands
 {
     public class BrandDeleteHandlerUnitTests
     {

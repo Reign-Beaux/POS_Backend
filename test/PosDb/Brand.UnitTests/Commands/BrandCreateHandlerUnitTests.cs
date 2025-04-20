@@ -4,7 +4,7 @@ using Application.UseCases.Brands.Commands.Create;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
 
-namespace Brands.UnitTests
+namespace Brands.UnitTests.Commands
 {
     public class BrandCreateHandlerUnitTests
     {
