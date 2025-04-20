@@ -2,21 +2,23 @@
 using Application.Interfaces.UnitOfWorks;
 using Application.UseCases.Brands.Commands.Create;
 using Domain.Entities.Brands;
+using Microsoft.Extensions.Logging;
 
 namespace Brands.UnitTests
 {
     public class BrandCreateHandlerUnitTests
     {
-        private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
-        private readonly Mock<IMapper> _mockMapper = new();
         private readonly Mock<IBrandRepository> _mockBrandRepository = new();
+        private readonly Mock<ILogger<BrandCreateHandler>> _mockLogger = new();
+        private readonly Mock<IMapper> _mockMapper = new();
+        private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
+
         private readonly IMediator _mediator;
 
         public BrandCreateHandlerUnitTests()
         {
             _mockPosDbUnitOfWork.Setup(x => x.BrandRepository).Returns(_mockBrandRepository.Object);
 
-            // Configuración de servicios de MediatR con PipelineBehavior
             var services = new ServiceCollection();
             services.AddMediatR(config =>
             {
@@ -24,6 +26,7 @@ namespace Brands.UnitTests
             });
 
             services.AddScoped(_ => _mockPosDbUnitOfWork.Object);
+            services.AddScoped(_ => _mockLogger.Object);
             services.AddScoped(_ => _mockMapper.Object);
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddValidatorsFromAssemblyContaining<BrandCreateValidator>();
@@ -33,7 +36,6 @@ namespace Brands.UnitTests
         }
 
         /* 
-         * ¿Qué vamos a probar?
          * El Escenario
          * Lo que debe regresar
          */
