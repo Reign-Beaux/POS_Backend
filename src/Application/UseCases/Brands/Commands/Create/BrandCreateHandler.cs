@@ -14,6 +14,13 @@ namespace Application.UseCases.Brands.Commands.Create
         {
             try
             {
+                var exists = await posDb.BrandRepository.GetByName(request.Name);
+                if (exists is not null)
+                {
+                    logger.LogWarning("Brand with name {Name} already exists", request.Name);
+                    return OperationResult.BadRequest($"Brand with name {request.Name} already exists.");
+                }
+
                 Brand brand = new()
                 {
                     Name = request.Name,
