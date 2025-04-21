@@ -6,18 +6,18 @@ namespace Application.UseCases.Brands.Commands.Create
 {
     public class BrandCreateValidator : AbstractValidator<BrandCreateCommand>
     {
-        public BrandCreateValidator()
+        public BrandCreateValidator(Language language)
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage(Language.GetString("NameIsRequired"))
+                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "NameIsRequired"))
                 .MaximumLength(BaseCatalog.MaxNameLength)
-                .WithMessage(Language.GetString("NameMaxLength"));
+                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "NameMaxLength"));
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage(Language.GetString("DescriptionIsRequired"))
+                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "DescriptionIsRequired"))
                 .MaximumLength(BaseCatalog.MaxDescriptionLength)
-                .WithMessage(Language.GetString("DescriptionMaxLength"));
+                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "DescriptionMaxLength"));
         }
     }
 }

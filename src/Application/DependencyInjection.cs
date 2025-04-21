@@ -1,4 +1,5 @@
 ﻿using Application.Behaviors;
+using Application.Languages;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,8 @@ namespace Application
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddAutoMapper(assembly);
+
+            services.AddSingleton<Language>();
 
             return services;
         }

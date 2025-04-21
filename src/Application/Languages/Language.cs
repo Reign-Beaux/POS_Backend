@@ -1,22 +1,21 @@
-﻿using System.Resources;
+﻿using System.Collections.Concurrent;
+using System.Resources;
 
 namespace Application.Languages
 {
-    public static class Language
+    public class Language
     {
-        public static readonly string[] SupportedLanguages = ["en", "es"];
-        public const string DefaultLanguage = "en";
+        private ConcurrentDictionary<ResourcesTypes, ResourceManager> _resourceManagers = new();
 
-        private static readonly ResourceManager _resourceManager;
-
-        static Language()
+        public string? GetString(ResourcesTypes resource, string name)
         {
-            _resourceManager = new ResourceManager("Application.Languages.CatalogMessages", typeof(Language).Assembly);
-        }
+            if (!_resourceManagers.TryGetValue(resource, out var resourceManager))
+            {
+                resourceManager = new ResourceManager($"Application.Languages.{resource}", typeof(Language).Assembly);
+                _resourceManagers[resource] = resourceManager;
+            }
 
-        public static string? GetString(string name)
-        {
-            return _resourceManager.GetString(name);
+            return resourceManager.GetString(name);
         }
     }
 }

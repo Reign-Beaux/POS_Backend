@@ -43,9 +43,9 @@ app.UseAuthorization();
 
 app.UseRequestLocalization(options =>
 {
-    options.SetDefaultCulture(Language.DefaultLanguage)
-           .AddSupportedCultures(Language.SupportedLanguages)
-           .AddSupportedUICultures(Language.SupportedLanguages);
+    options.SetDefaultCulture(LanguageConfigurations.DefaultLanguage)
+           .AddSupportedCultures(LanguageConfigurations.SupportedLanguages)
+           .AddSupportedUICultures(LanguageConfigurations.SupportedLanguages);
 });
 
 app.MapControllers();

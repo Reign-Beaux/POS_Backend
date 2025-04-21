@@ -1,6 +1,6 @@
 ﻿namespace Application.Languages
 {
-    public enum ResourcesList
+    public enum ResourcesTypes
     {
         ArticleMessages,
         BrandMessages,
