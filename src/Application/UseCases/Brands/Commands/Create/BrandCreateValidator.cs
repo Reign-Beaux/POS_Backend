@@ -1,4 +1,6 @@
-﻿using FluentValidation;
+﻿using Application.Languages;
+using Domain.Entities;
+using FluentValidation;
 
 namespace Application.UseCases.Brands.Commands.Create
 {
@@ -8,14 +10,14 @@ namespace Application.UseCases.Brands.Commands.Create
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("Name is required.")
-                .MaximumLength(64)
-                .WithMessage("Name must not exceed 64 characters.");
+                .WithMessage(Language.GetString("NameIsRequired"))
+                .MaximumLength(BaseCatalog.MaxNameLength)
+                .WithMessage(Language.GetString("NameMaxLength"));
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage("Description is required.")
-                .MaximumLength(256)
-                .WithMessage("Description must not exceed 256 characters.");
+                .WithMessage(Language.GetString("DescriptionIsRequired"))
+                .MaximumLength(BaseCatalog.MaxDescriptionLength)
+                .WithMessage(Language.GetString("DescriptionMaxLength"));
         }
     }
 }

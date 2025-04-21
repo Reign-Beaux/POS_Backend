@@ -1,6 +1,7 @@
 ﻿using Application.Behaviors;
 using Application.Interfaces.UnitOfWorks;
 using Application.UseCases.Brands.Commands.Create;
+using Domain.Entities;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -121,7 +122,7 @@ namespace Brands.UnitTests.Commands
         public async Task WhenNameExceedsMaxLength_ShouldReturnValidationError()
         {
             // Arrange
-            var longName = new string('A', 65);
+            var longName = new string('A', BaseCatalog.MaxNameLength);
             var command = new BrandCreateCommand(longName, "Valid Description");
 
             // Act
@@ -140,7 +141,7 @@ namespace Brands.UnitTests.Commands
         public async Task WhenDescriptionExceedsMaxLength_ShouldReturnValidationError()
         {
             // Arrange
-            var longDescription = new string('B', 257);
+            var longDescription = new string('B', (BaseCatalog.MaxDescriptionLength);
             var command = new BrandCreateCommand("Valid Name", longDescription);
 
             // Act

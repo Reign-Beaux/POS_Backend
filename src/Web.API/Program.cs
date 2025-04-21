@@ -1,6 +1,7 @@
-using Web.API;
 using Application;
+using Application.Languages;
 using Infrastructure;
+using Web.API;
 using Web.API.Extensions;
 
 var cors = "Cors";
@@ -39,5 +40,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors(cors);
 app.UseAuthorization();
+
+app.UseRequestLocalization(options =>
+{
+    options.SetDefaultCulture(Language.DefaultLanguage)
+           .AddSupportedCultures(Language.SupportedLanguages)
+           .AddSupportedUICultures(Language.SupportedLanguages);
+});
+
 app.MapControllers();
 app.Run();
