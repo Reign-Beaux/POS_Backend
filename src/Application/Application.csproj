@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Localizers\" />
     <Folder Include="UseCases\Articles\Commands\Delete\" />
     <Folder Include="UseCases\Articles\Commands\Update\" />
     <Folder Include="UseCases\Articles\Queries\GetById\" />

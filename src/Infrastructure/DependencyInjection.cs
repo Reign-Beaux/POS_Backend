@@ -1,4 +1,4 @@
-﻿using Application.Consts;
+﻿using Application.Constants;
 using Application.Interfaces.Context;
 using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Articles;

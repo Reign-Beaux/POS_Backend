@@ -1,4 +1,4 @@
-﻿namespace Application.Consts
+﻿namespace Application.Constants
 {
     public static class ConnectionStrings
     {
