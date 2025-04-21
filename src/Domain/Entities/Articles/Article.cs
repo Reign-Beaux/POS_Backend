@@ -3,7 +3,7 @@ using Domain.Entities.Brands;
 
 namespace Domain.Entities.Articles
 {
-    public class Article : BaseCatalogs
+    public class Article : BaseCatalog
     {
         public Guid ArticleTypeId { get; set; }
         public Guid BrandId { get; set; }
