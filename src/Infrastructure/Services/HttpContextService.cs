@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Services
 {
-    public class HttpContextService(IHttpContextAccessor contextAccessor) : IHttpContextService
+    internal sealed class HttpContextService(IHttpContextAccessor contextAccessor) : IHttpContextService
     {
         private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
