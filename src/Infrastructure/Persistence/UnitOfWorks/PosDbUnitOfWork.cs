@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Infrastructure.Persistence.UnitOfWorks
 {
-    public class PosDbUnitOfWork(
+    internal class PosDbUnitOfWork(
         IPosDbContext context,
         IArticleRepository articleRepository,
         IArticleTypeRepository articleTypeRepository,
