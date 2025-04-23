@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PosDb", "PosDb", "{53C51348
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brands.UnitTests", "test\PosDb\Brand.UnitTests\Brands.UnitTests.csproj", "{9E086EAA-2E37-49C8-912D-6528365F3AE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticleTypes.UnitTests", "ArticleTypes.UnitTests\ArticleTypes.UnitTests.csproj", "{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,10 +45,6 @@ Global
 		{9E086EAA-2E37-49C8-912D-6528365F3AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E086EAA-2E37-49C8-912D-6528365F3AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E086EAA-2E37-49C8-912D-6528365F3AE4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,7 +56,6 @@ Global
 		{FA678803-E101-4FCD-8062-7FE47B3E67D6} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{53C51348-DCAF-41BD-8533-0F77DCD50251} = {480E1A14-28C5-486F-B32E-12BFB099594A}
 		{9E086EAA-2E37-49C8-912D-6528365F3AE4} = {53C51348-DCAF-41BD-8533-0F77DCD50251}
-		{21AB275E-ED3C-4A4F-8418-FF97E44C8EAA} = {53C51348-DCAF-41BD-8533-0F77DCD50251}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CBEC720-371D-48F0-AF62-1C19E9465EF8}

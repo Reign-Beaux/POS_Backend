@@ -18,6 +18,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfraestructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
+            services.AddEnyimMemcached(options => configuration.GetSection("EnyimMemcached").Bind(options));
             services
                 .AddAdapters()
                 .AddPersistence(configuration)
