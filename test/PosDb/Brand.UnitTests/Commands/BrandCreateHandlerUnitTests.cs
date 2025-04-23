@@ -141,7 +141,7 @@ namespace Brands.UnitTests.Commands
         public async Task WhenDescriptionExceedsMaxLength_ShouldReturnValidationError()
         {
             // Arrange
-            var longDescription = new string('B', (BaseCatalog.MaxDescriptionLength);
+            var longDescription = new string('B', (BaseCatalog.MaxDescriptionLength));
             var command = new BrandCreateCommand("Valid Name", longDescription);
 
             // Act
