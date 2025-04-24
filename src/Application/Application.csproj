@@ -26,45 +26,4 @@
     <Folder Include="UseCases\Articles\Queries\GetById\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Languages\ArticleMessages.Designer.cs">
-      <DependentUpon>ArticleMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Languages\BrandMessages.Designer.cs">
-      <DependentUpon>BrandMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Languages\CatalogMessages.Designer.cs">
-      <DependentUpon>CatalogMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Languages\ArticleMessages.resx">
-      <LastGenOutput>ArticleMessages.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Languages\BrandMessages.es.resx">
-      <LastGenOutput>BrandMessages.es.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Languages\BrandMessages.resx">
-      <LastGenOutput>BrandMessages.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Languages\CatalogMessages.es.resx">
-      <LastGenOutput>CatalogMessages.es.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Languages\CatalogMessages.resx">
-      <LastGenOutput>CatalogMessages.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
-﻿using Application.Languages;
+﻿using Application.Extensions;
+using Application.Interfaces.Caching;
 using Domain.Entities;
 using FluentValidation;
 
@@ -6,18 +7,18 @@ namespace Application.UseCases.Brands.Commands.Create
 {
     public class BrandCreateValidator : AbstractValidator<BrandCreateCommand>
     {
-        public BrandCreateValidator(Language language)
+        public BrandCreateValidator(ILocalizationCached localization)
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "NameIsRequired"))
+                .WithMessageAsync(localization.GetText("Catalog_NameIsRequired"))
                 .MaximumLength(BaseCatalog.MaxNameLength)
-                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "NameMaxLength"));
+                .WithMessageAsync(localization.GetText("Catalog_NameMaxLength"));
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "DescriptionIsRequired"))
+                .WithMessageAsync(localization.GetText("Catalog_DescriptionIsRequired"))
                 .MaximumLength(BaseCatalog.MaxDescriptionLength)
-                .WithMessage(language.GetString(ResourcesTypes.CatalogMessages, "DescriptionMaxLength"));
+                .WithMessageAsync(localization.GetText("Catalog_DescriptionMaxLength"));
         }
     }
 }
