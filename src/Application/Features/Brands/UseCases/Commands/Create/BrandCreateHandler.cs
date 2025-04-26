@@ -5,14 +5,14 @@ using Domain.Entities.Brands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Brands.Commands.Create
+namespace Application.Features.Brands.UseCases.Commands.Create
 {
     public sealed class BrandCreateHandler(
         ILocalizationCached localization,
         ILogger<BrandCreateHandler> logger,
-        IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<string>>
+        IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Guid>>
     {
-        public async Task<OperationResult<string>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<Guid>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace Application.Features.Brands.Commands.Create
                     string alreadyExistsMessage = await localization.GetText(BrandCachedKeys.AlreadyExists);
                     alreadyExistsMessage = string.Format(alreadyExistsMessage, request.Name);
                     logger.LogWarning(alreadyExistsMessage);
-                    return OperationResult.BadRequest(alreadyExistsMessage);
+                    return OperationResult.Conflict(alreadyExistsMessage);
                 }
 
                 Brand brand = new()
@@ -30,6 +30,7 @@ namespace Application.Features.Brands.Commands.Create
                     Name = request.Name,
                     Description = request.Description
                 };
+
                 posDb.BrandRepository.Add(brand, cancellationToken);
                 await posDb.SaveChangesAsync(cancellationToken);
 
@@ -37,7 +38,7 @@ namespace Application.Features.Brands.Commands.Create
                 createdSuccessfullyMessage = string.Format(createdSuccessfullyMessage, request.Name);
                 logger.LogInformation(createdSuccessfullyMessage);
 
-                return OperationResult.Success(createdSuccessfullyMessage);
+                return OperationResult.CreatedAtAction(brand.Id);
             }
             catch (Exception ex)
             {

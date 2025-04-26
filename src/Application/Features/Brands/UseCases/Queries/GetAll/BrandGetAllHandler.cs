@@ -6,7 +6,7 @@ using Domain.Entities.Brands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Brands.Queries.GetAll
+namespace Application.Features.Brands.UseCases.Queries.GetAll
 {
     public sealed class BrandGetAllHandler(
         ILogger<BrandGetAllHandler> logger,

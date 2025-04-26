@@ -2,7 +2,7 @@
 using Application.OperationResults;
 using MediatR;
 
-namespace Application.Features.Brands.Queries.GetByName
+namespace Application.Features.Brands.UseCases.Queries.GetByName
 {
     public record BrandGetByNameQuery(string Name) : IRequest<OperationResult<BrandDTO>>;
 }

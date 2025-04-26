@@ -2,7 +2,7 @@
 using Application.OperationResults;
 using MediatR;
 
-namespace Application.Features.Brands.Queries.GetAll
+namespace Application.Features.Brands.UseCases.Queries.GetAll
 {
     public record BrandGetAllQuery() : IRequest<OperationResult<IEnumerable<BrandDTO>>>;
 }

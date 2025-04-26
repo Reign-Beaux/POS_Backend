@@ -8,22 +8,23 @@ namespace Web.API.Controllers.Base
     public class ControllerAbstraction : ControllerBase
     {
 
-        protected IActionResult HandleResponse<T>(OperationResult<T> operationResult)
+        protected IActionResult HandleErrorResponse<T>(OperationResult<T> operationResult)
         {
-            if (operationResult.IsSuccess)
-            {
-                return Ok(operationResult.Value);
-            }
-
             Dictionary<HttpStatusCode, Func<ErrorDetails, IActionResult>> failureDictionary = new()
             {
                 { HttpStatusCode.BadRequest, BadRequest },
+                { HttpStatusCode.Conflict, Conflict },
+                { HttpStatusCode.InternalServerError, details => StatusCode((int)operationResult.Status, details.Message) },
                 { HttpStatusCode.NotFound, NotFound },
-                { HttpStatusCode.InternalServerError, details => StatusCode((int)details.Status, details.Message) },
                 { HttpStatusCode.Unauthorized, Unauthorized }
             };
 
-            return failureDictionary[operationResult.ErrorDetails!.Status](operationResult.ErrorDetails!);
+            if (failureDictionary.TryGetValue(operationResult.Status, out var handler))
+            {
+                return handler(operationResult.ErrorDetails!);
+            }
+
+            return StatusCode((int)operationResult.Status, operationResult.ErrorDetails!.Message);
         }
     }
 }

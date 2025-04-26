@@ -11,20 +11,20 @@ namespace Web.API.Controllers
     [Route("api/[controller]")]
     public class ArticleController(ISender sender) : ControllerAbstraction
     {
-        [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ArticleDTO>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetAll()
-        {
-            var operationResult = await sender.Send(new ArticleGetAllQuery());
-            return HandleResponse(operationResult);
-        }
+        //[HttpGet]
+        //[ProducesResponseType(typeof(IEnumerable<ArticleDTO>), (int)HttpStatusCode.OK)]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    var operationResult = await sender.Send(new ArticleGetAllQuery());
+        //    return HandleResponse(operationResult);
+        //}
 
-        [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.NoContent)]
-        public async Task<IActionResult> Create([FromBody] ArticleCreateCommand command)
-        {
-            var operationResult = await sender.Send(command);
-            return HandleResponse(operationResult);
-        }
+        //[HttpPost]
+        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
+        //public async Task<IActionResult> Create([FromBody] ArticleCreateCommand command)
+        //{
+        //    var operationResult = await sender.Send(command);
+        //    return HandleResponse(operationResult);
+        //}
     }
 }

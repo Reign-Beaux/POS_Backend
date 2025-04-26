@@ -4,7 +4,7 @@ using Domain.Entities.Brands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Brands.Commands.Update
+namespace Application.Features.Brands.UseCases.Commands.Update
 {
     public sealed class BrandUpdateHandler(
         IPosDbUnitOfWork posDb,

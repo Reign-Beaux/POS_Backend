@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Features.Brands.Queries.GetById
+namespace Application.Features.Brands.UseCases.Queries.GetById
 {
     public class BrandGetByIdValidator : AbstractValidator<BrandGetByIdQuery>
     {

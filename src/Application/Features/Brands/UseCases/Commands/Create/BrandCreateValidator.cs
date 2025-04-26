@@ -2,7 +2,7 @@
 using Domain.Entities;
 using FluentValidation;
 
-namespace Application.Features.Brands.Commands.Create
+namespace Application.Features.Brands.UseCases.Commands.Create
 {
     public class BrandCreateValidator : AbstractValidator<BrandCreateCommand>
     {

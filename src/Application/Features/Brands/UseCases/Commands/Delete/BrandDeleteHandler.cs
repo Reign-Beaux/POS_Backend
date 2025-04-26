@@ -4,7 +4,7 @@ using Domain.Entities.Brands;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Features.Brands.Commands.Delete
+namespace Application.Features.Brands.UseCases.Commands.Delete
 {
     public sealed class BrandDeleteHandler(
         ILogger<BrandDeleteHandler> logger,

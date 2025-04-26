@@ -1,7 +1,7 @@
 ﻿using Application.OperationResults;
 using MediatR;
 
-namespace Application.Features.Brands.Commands.Update
+namespace Application.Features.Brands.UseCases.Commands.Update
 {
     public record BrandUpdateCommand(
         Guid Id,

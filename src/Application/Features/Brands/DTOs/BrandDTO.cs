@@ -2,5 +2,5 @@
 
 namespace Application.Features.Brands.DTOs
 {
-    public class BrandDTO : CatalogDTOAbstraction { };
+    public sealed class BrandDTO : CatalogDTOAbstraction { };
 }
