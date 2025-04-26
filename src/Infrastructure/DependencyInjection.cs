@@ -1,6 +1,7 @@
 ﻿using Application.Constants;
 using Application.Interfaces.Caching;
 using Application.Interfaces.Context;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Articles;
 using Domain.Entities.ArticleTypes;
@@ -10,6 +11,7 @@ using Infrastructure.Caching.Localization;
 using Infrastructure.Persistence.Context;
 using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.UnitOfWorks;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +60,7 @@ namespace Infrastructure
 
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped(typeof(ILogginMessagesService<>), typeof(LogginMessagesService<>));
 
             return services;
         }

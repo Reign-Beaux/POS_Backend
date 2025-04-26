@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Caching;
+﻿using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
 using Domain.Entities.Brands;
@@ -8,8 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Features.Brands.UseCases.Commands.Create
 {
     public sealed class BrandCreateHandler(
-        ILocalizationCached localization,
-        ILogger<BrandCreateHandler> logger,
+        ILogginMessagesService<BrandCreateHandler> logginMessagesService,
         IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Guid>>
     {
         public async Task<OperationResult<Guid>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
@@ -19,10 +18,8 @@ namespace Application.Features.Brands.UseCases.Commands.Create
                 var exists = await posDb.BrandRepository.GetByName(request.Name);
                 if (exists is not null)
                 {
-                    string alreadyExistsMessage = await localization.GetText(BrandCachedKeys.AlreadyExists);
-                    alreadyExistsMessage = string.Format(alreadyExistsMessage, request.Name);
-                    logger.LogWarning(alreadyExistsMessage);
-                    return OperationResult.Conflict(alreadyExistsMessage);
+                    string message = await logginMessagesService.Handle(BrandCachedKeys.AlreadyExists, request.Name, LogLevel.Warning);
+                    return OperationResult.Conflict(message);
                 }
 
                 Brand brand = new()
@@ -34,18 +31,14 @@ namespace Application.Features.Brands.UseCases.Commands.Create
                 posDb.BrandRepository.Add(brand, cancellationToken);
                 await posDb.SaveChangesAsync(cancellationToken);
 
-                string createdSuccessfullyMessage = await localization.GetText(BrandCachedKeys.CreatedSuccessfully);
-                createdSuccessfullyMessage = string.Format(createdSuccessfullyMessage, request.Name);
-                logger.LogInformation(createdSuccessfullyMessage);
+                await logginMessagesService.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information);
 
                 return OperationResult.CreatedAtAction(brand.Id);
             }
             catch (Exception ex)
             {
-                string errorCreatingMessage = await localization.GetText(BrandCachedKeys.ErrorCreating);
-                errorCreatingMessage = string.Format(errorCreatingMessage, request.Name);
-                logger.LogError(ex, errorCreatingMessage);
-                return OperationResult.InternalServerError(errorCreatingMessage);
+                string message = await logginMessagesService.Handle(BrandCachedKeys.ErrorCreating, request.Name, LogLevel.Error);
+                return OperationResult.InternalServerError(message);
             }
         }
     }
