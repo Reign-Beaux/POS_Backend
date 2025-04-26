@@ -2,5 +2,5 @@
 
 namespace Application.DTOs.ArticleTypes
 {
-    public record ArticleTypeDTO() : CatalogDTOAbstraction;
+    public sealed class ArticleTypeDTO() : CatalogDTOAbstraction;
 }

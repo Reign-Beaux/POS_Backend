@@ -2,11 +2,13 @@
 
 namespace Application.DTOs.Articles
 {
-    public record ArticleDTO(
-        string ArticleTypeName,
-        string BrandName,
-        decimal Stock,
-        decimal MinStockLevel,
-        decimal MaxStockLevel,
-        string BarCode) : CatalogDTOAbstraction;
+    public sealed class ArticleDTO : CatalogDTOAbstraction
+    {
+        public string ArticleTypeName { get; set; } = string.Empty;
+        public string BrandName { get; set; } = string.Empty;
+        public decimal Stock { get; set; }
+        public decimal MinStockLevel { get; set; }
+        public decimal MaxStockLevel { get; set; }
+        public string BarCode { get; set; } = string.Empty;
+    }
 }
