@@ -1,5 +1,5 @@
 using Application;
-using Application.Languages;
+using Application.Constants;
 using Infrastructure;
 using Web.API;
 using Web.API.Extensions;
