@@ -16,14 +16,14 @@ namespace Application.Behaviors
         {
             if (_validator is null)
             {
-                return await next();
+                return await next(cancellationToken);
             }
 
             var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
 
             if (validatorResult.IsValid)
             {
-                return await next();
+                return await next(cancellationToken);
             }
 
             var validationErrors = validatorResult.Errors
