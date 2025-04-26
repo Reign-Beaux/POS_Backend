@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs.ArticleTypes
+﻿using Application.Shared.Catalogs;
+
+namespace Application.DTOs.ArticleTypes
 {
-    public record ArticleTypeDTO() : CatalogDTO;
+    public record ArticleTypeDTO() : CatalogDTOAbstraction;
 }

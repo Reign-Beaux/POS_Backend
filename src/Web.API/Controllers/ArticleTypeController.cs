@@ -1,10 +1,10 @@
 ﻿using Application.DTOs.ArticleTypes;
 using Application.OperationResults;
-using Application.UseCases.ArticleTypes.Commands.Create;
-using Application.UseCases.ArticleTypes.Commands.Delete;
-using Application.UseCases.ArticleTypes.Commands.Update;
-using Application.UseCases.ArticleTypes.Queries.GetAll;
-using Application.UseCases.ArticleTypes.Queries.GetById;
+using Application.Features.ArticleTypes.Commands.Create;
+using Application.Features.ArticleTypes.Commands.Delete;
+using Application.Features.ArticleTypes.Commands.Update;
+using Application.Features.ArticleTypes.Queries.GetAll;
+using Application.Features.ArticleTypes.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

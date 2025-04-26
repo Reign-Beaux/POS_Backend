@@ -1,10 +1,14 @@
-﻿using Application.OperationResults;
+﻿using Application.Interfaces.Caching;
+using Application.OperationResults;
 using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 
 namespace Application.Behaviors
 {
-    public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null) : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationBehavior<TRequest, TResponse>(
+        ILocalizationCached localization,
+        IValidator<TRequest>? validator = null) : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
         private readonly IValidator<TRequest>? _validator = validator;
@@ -26,13 +30,18 @@ namespace Application.Behaviors
                 return await next(cancellationToken);
             }
 
-            var validationErrors = validatorResult.Errors
-                .Select(validationFailure => new ValidationError
+            List<ValidationError> validationErrors = [];
+
+            foreach (ValidationFailure error in validatorResult.Errors)
+            {
+                string errorMessage = await localization.GetText(error.ErrorMessage);
+                ValidationError validationError = new()
                 {
-                    PropertyName = validationFailure.PropertyName,
-                    ErrorMessage = validationFailure.ErrorMessage
-                })
-                .ToList();
+                    PropertyName = error.PropertyName,
+                    ErrorMessage = errorMessage
+                };
+                validationErrors.Add(validationError);
+            };
 
             return (dynamic)OperationResult.Validations(validationErrors);
         }

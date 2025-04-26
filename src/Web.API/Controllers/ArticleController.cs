@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Articles;
-using Application.UseCases.Articles.Commands.Create;
-using Application.UseCases.Articles.Queries.GetAll;
+using Application.Features.Articles.Commands.Create;
+using Application.Features.Articles.Queries.GetAll;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

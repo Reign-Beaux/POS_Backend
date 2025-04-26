@@ -1,14 +1,14 @@
-﻿using Application.DTOs.Brands;
-using Application.OperationResults;
-using Application.UseCases.Brands.Commands.Create;
-using Application.UseCases.Brands.Commands.Delete;
-using Application.UseCases.Brands.Commands.Update;
-using Application.UseCases.Brands.Queries.GetAll;
-using Application.UseCases.Brands.Queries.GetById;
+﻿using Application.OperationResults;
+using Application.Features.Brands.Commands.Create;
+using Application.Features.Brands.Commands.Delete;
+using Application.Features.Brands.Commands.Update;
+using Application.Features.Brands.Queries.GetAll;
+using Application.Features.Brands.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Web.API.Controllers.Base;
+using Application.Features.Brands.DTOs;
 
 namespace Web.API.Controllers
 {

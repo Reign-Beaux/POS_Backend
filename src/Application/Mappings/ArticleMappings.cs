@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Articles;
-using Application.UseCases.Articles.Commands.Create;
+using Application.Features.Articles.Commands.Create;
 using AutoMapper;
 using Domain.Entities.Articles;
 

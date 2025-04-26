@@ -1,4 +1,6 @@
-﻿namespace Application.DTOs.Articles
+﻿using Application.Shared.Catalogs;
+
+namespace Application.DTOs.Articles
 {
     public record ArticleDTO(
         string ArticleTypeName,
@@ -6,5 +8,5 @@
         decimal Stock,
         decimal MinStockLevel,
         decimal MaxStockLevel,
-        string BarCode) : CatalogDTO;
+        string BarCode) : CatalogDTOAbstraction;
 }
