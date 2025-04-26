@@ -5,7 +5,7 @@
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
 
-        public const int MaxNameLength = 64;
-        public const int MaxDescriptionLength = 256;
+        public const int NameMaxLength = 64;
+        public const int DescriptionMaxLength = 256;
     }
 }
