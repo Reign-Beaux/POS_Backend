@@ -1,4 +1,5 @@
-﻿using Application.Extensions;
+﻿using Application.Constants.CachedKeys;
+using Application.Extensions;
 using Application.Interfaces.Caching;
 using Domain.Entities;
 using FluentValidation;
@@ -11,14 +12,14 @@ namespace Application.UseCases.Brands.Commands.Create
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessageAsync(localization.GetText("Catalog_NameIsRequired"))
-                .MaximumLength(BaseCatalog.MaxNameLength)
-                .WithMessageAsync(localization.GetText("Catalog_NameMaxLength"));
+                .WithMessageAsync(localization.GetText(CatalogCachedKeys.NameIsRequired))
+                .MaximumLength(BaseCatalog.NameMaxLength)
+                .WithMessageAsync(localization.GetText(CatalogCachedKeys.NameMaxLength));
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessageAsync(localization.GetText("Catalog_DescriptionIsRequired"))
-                .MaximumLength(BaseCatalog.MaxDescriptionLength)
-                .WithMessageAsync(localization.GetText("Catalog_DescriptionMaxLength"));
+                .WithMessageAsync(localization.GetText(CatalogCachedKeys.DescriptionIsRequired))
+                .MaximumLength(BaseCatalog.DescriptionMaxLength)
+                .WithMessageAsync(localization.GetText(CatalogCachedKeys.DescriptionMaxLength));
         }
     }
 }
