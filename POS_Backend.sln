@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PosDb", "PosDb", "{53C51348-DCAF-41BD-8533-0F77DCD50251}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brands.Tests", "test\PosDb\Brand.UnitTests\Brands.Tests.csproj", "{9E086EAA-2E37-49C8-912D-6528365F3AE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brands.UnitTests", "test\PosDb\Brand.UnitTests\Brands.UnitTests.csproj", "{9E086EAA-2E37-49C8-912D-6528365F3AE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
