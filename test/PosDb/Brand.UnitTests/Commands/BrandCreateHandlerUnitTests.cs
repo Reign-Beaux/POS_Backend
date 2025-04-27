@@ -93,7 +93,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Once);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -130,7 +130,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -205,7 +205,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -242,7 +242,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -287,7 +287,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -332,7 +332,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -371,7 +371,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Once);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Never);
         }
 
         [Fact]
@@ -386,8 +386,11 @@ namespace Brands.UnitTests.Commands
             _mockPosDbUnitOfWork
                 .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception(ExpectedValidationMessages.DatabaseError));
+            _mockLocalization
+                .Setup(l => l.GetText(BrandCachedKeys.ErrorCreating))
+                .ReturnsAsync(ExpectedValidationMessages.DatabaseError);
             _mockLogginMessages
-                .Setup(r => r.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error))
+                .Setup(r => r.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()))
                 .ReturnsAsync(ExpectedValidationMessages.DatabaseError);
 
             // Act
@@ -410,7 +413,7 @@ namespace Brands.UnitTests.Commands
 
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
             _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
-            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Once);
+            _mockLogginMessages.Verify(u => u.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, It.IsAny<Exception>()), Times.Once);
         }
     }
 }
