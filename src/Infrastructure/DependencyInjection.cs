@@ -60,7 +60,7 @@ namespace Infrastructure
 
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped(typeof(ILogginMessagesService<>), typeof(LogginMessagesService<>));
+            services.AddScoped(typeof(ILoggingMessagesService<>), typeof(LoggingMessagesService<>));
 
             return services;
         }

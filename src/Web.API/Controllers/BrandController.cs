@@ -1,8 +1,8 @@
 ﻿using Application.OperationResults;
-using Application.Features.Brands.Commands.Delete;
-using Application.Features.Brands.Commands.Update;
-using Application.Features.Brands.Queries.GetAll;
-using Application.Features.Brands.Queries.GetById;
+using Application.Features.Brands.UseCases.Commands.Delete;
+using Application.Features.Brands.UseCases.Commands.Update;
+using Application.Features.Brands.UseCases.Queries.GetAll;
+using Application.Features.Brands.UseCases.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -30,9 +30,13 @@ namespace Web.API.Controllers
         [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            //BrandGetByIdQuery query = new(id);
-            //var operationResult = await sender.Send(query);
-            //return HandleResponse(operationResult);
+            BrandGetByIdQuery query = new(id);
+            var operationResult = await sender.Send(query);
+
+            if (operationResult.Status != HttpStatusCode.Created)
+                return HandleErrorResponse(operationResult);
+
+            return Ok(operationResult.Value);
         }
 
         [HttpPost]

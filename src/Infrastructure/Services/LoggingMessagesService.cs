@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services
 {
-    internal class LogginMessagesService<T>(
+    internal class LoggingMessagesService<T>(
         ILocalizationCached localization,
-        ILogger<T> logger) : ILogginMessagesService<T>
+        ILogger<T> logger) : ILoggingMessagesService<T>
     {
         private readonly Dictionary<LogLevel, Action<string>> _logActions = new()
         {
@@ -40,6 +40,22 @@ namespace Infrastructure.Services
                 string message = await localization.GetText(localizationKey);
 
                 LogMessage(logLevel, message);
+
+                return message;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error al obtener el mensaje de localización.");
+                throw;
+            }
+        }
+
+        public async Task<string> HandleExceptionMessage(string localizationKey, string value, Exception exception)
+        {
+            try
+            {
+                string message = await localization.GetText(localizationKey);
+                logger.LogError(exception, message);
 
                 return message;
             }

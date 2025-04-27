@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Features.Brands.UseCases.Commands.Create
 {
     public sealed class BrandCreateHandler(
-        ILogginMessagesService<BrandCreateHandler> logginMessagesService,
+        ILoggingMessagesService<BrandCreateHandler> logginMessagesService,
         IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Guid>>
     {
         public async Task<OperationResult<Guid>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
@@ -37,7 +37,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
             }
             catch (Exception ex)
             {
-                string message = await logginMessagesService.Handle(BrandCachedKeys.ErrorCreating, request.Name, LogLevel.Error);
+                string message = await logginMessagesService.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, request.Name, ex);
                 return OperationResult.InternalServerError(message);
             }
         }

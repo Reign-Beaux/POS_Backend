@@ -2,9 +2,10 @@
 
 namespace Application.Interfaces.Services
 {
-    public interface ILogginMessagesService<T>
+    public interface ILoggingMessagesService<T>
     {
         Task<string> Handle(string localizationKey, string name, LogLevel logLevel);
         Task<string> Handle(string localizationKey, LogLevel logLevel);
+        Task<string> HandleExceptionMessage(string localizationKey, string value, Exception exception);
     }
 }

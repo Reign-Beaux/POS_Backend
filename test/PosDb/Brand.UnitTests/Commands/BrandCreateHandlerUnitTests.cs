@@ -31,7 +31,7 @@ namespace Brands.UnitTests.Commands
     public class BrandCreateHandlerUnitTests
     {
         private readonly Mock<ILocalizationCached> _mockLocalization = new();
-        private readonly Mock<ILogginMessagesService<BrandCreateHandler>> _mockLogginMessages = new();
+        private readonly Mock<ILoggingMessagesService<BrandCreateHandler>> _mockLogginMessages = new();
         private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
 
         private readonly IMediator _mediator;
