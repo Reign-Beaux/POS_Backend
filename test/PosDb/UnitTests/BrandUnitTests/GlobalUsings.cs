@@ -1,4 +1,4 @@
-global using AutoMapper;
+﻿global using AutoMapper;
 global using FluentAssertions;
 global using FluentValidation;
 global using MediatR;

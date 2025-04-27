@@ -8,7 +8,7 @@ using Application.Shared.Catalogs;
 using Domain.Entities;
 using Domain.Entities.Brands;
 
-namespace Brands.UnitTests.Commands
+namespace BrandUnitTests.Commands
 {
     static class MockFieldValues
     {
