@@ -1,12 +1,12 @@
 ﻿using Application.Behaviors;
+using Application.Features.Brands;
+using Application.Features.Brands.UseCases.Commands.Create;
 using Application.Interfaces.Caching;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
-using Application.Features.Brands.Commands.Create;
+using Application.Shared.Catalogs;
 using Domain.Entities;
 using Domain.Entities.Brands;
-using Microsoft.Extensions.Logging;
-using System.Net;
-using Application.Shared.Catalogs;
 
 namespace Brands.UnitTests.Commands
 {
@@ -30,336 +30,387 @@ namespace Brands.UnitTests.Commands
 
     public class BrandCreateHandlerUnitTests
     {
-        //private readonly Mock<ILocalizationCached> _mockLocalization = new();
-        //private readonly Mock<ILogger<BrandCreateHandler>> _mockLogger = new();
-        //private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
+        private readonly Mock<ILocalizationCached> _mockLocalization = new();
+        private readonly Mock<ILogginMessagesService<BrandCreateHandler>> _mockLogginMessages = new();
+        private readonly Mock<IPosDbUnitOfWork> _mockPosDbUnitOfWork = new();
 
-        //private readonly IMediator _mediator;
+        private readonly IMediator _mediator;
 
-        //public BrandCreateHandlerUnitTests()
-        //{
-        //    Mock<IBrandRepository> mockBrandRepository = new();
-        //    _mockPosDbUnitOfWork.Setup(x => x.BrandRepository).Returns(mockBrandRepository.Object);
+        public BrandCreateHandlerUnitTests()
+        {
+            Mock<IBrandRepository> mockBrandRepository = new();
+            _mockPosDbUnitOfWork.Setup(x => x.BrandRepository).Returns(mockBrandRepository.Object);
 
-        //    var services = new ServiceCollection();
-        //    services.AddMediatR(config =>
-        //    {
-        //        config.RegisterServicesFromAssemblyContaining<BrandCreateHandler>();
-        //    });
+            var services = new ServiceCollection();
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssemblyContaining<BrandCreateHandler>();
+            });
 
-        //    services.AddScoped(_ => _mockLocalization.Object);
-        //    services.AddScoped(_ => _mockPosDbUnitOfWork.Object);
-        //    services.AddScoped(_ => _mockLogger.Object);
+            services.AddScoped(_ => _mockLocalization.Object);
+            services.AddScoped(_ => _mockLogginMessages.Object);
+            services.AddScoped(_ => _mockPosDbUnitOfWork.Object);
 
-        //    services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-        //    services.AddValidatorsFromAssemblyContaining<BrandCreateHandler>();
+            services.AddValidatorsFromAssemblyContaining<BrandCreateHandler>();
 
-        //    var provider = services.BuildServiceProvider();
-        //    _mediator = provider.GetRequiredService<IMediator>();
-        //}
+            var provider = services.BuildServiceProvider();
+            _mediator = provider.GetRequiredService<IMediator>();
+        }
 
         ///* 
         // * El Escenario
         // * Lo que debe regresar
         // */
 
-        //[Fact]
-        //public async Task WhenAllIsOk_ShouldReturnSuccess()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
+        [Fact]
+        public async Task WhenAllIsOk_ShouldReturnSuccess()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
 
-        //    _mockPosDbUnitOfWork
-        //        .Setup(r => r.BrandRepository.GetByName(MockFieldValues.Name))
-        //        .ReturnsAsync((Brand?)null);
-        //    _mockPosDbUnitOfWork
-        //        .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
-        //        .ReturnsAsync(1);
+            _mockPosDbUnitOfWork
+                .Setup(r => r.BrandRepository.GetByName(MockFieldValues.Name))
+                .ReturnsAsync((Brand?)null);
+            _mockPosDbUnitOfWork
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeTrue();
-        //    result.ErrorDetails.Should().BeNull();
+            // Assert
+            result.Value.Should().NotBeEmpty();
+            result.Status.Should().Be(HttpStatusCode.Created);
+            result.ErrorDetails.Should().BeNull();
 
-        //    // Verify
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Exactly(2));
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Once);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        //}
+            // Verify
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Exactly(2));
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
-        //[Fact]
-        //public async Task WhenNameIsEmpty_ShouldReturnValidationError()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(string.Empty, MockFieldValues.Description);
-        //    string expectedErrorMessage = ExpectedValidationMessages.NameIsRequired;
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Once);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.NameIsRequired))
-        //        .ReturnsAsync(expectedErrorMessage);
+        [Fact]
+        public async Task WhenNameIsEmpty_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(string.Empty, MockFieldValues.Description);
+            string expectedErrorMessage = ExpectedValidationMessages.NameIsRequired;
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.NameIsRequired))
+                .ReturnsAsync(expectedErrorMessage);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails.Errors.Should().ContainSingle(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Name) &&
-        //        e.ErrorMessage == expectedErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().ContainSingle(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Name) &&
+                e.ErrorMessage == expectedErrorMessage);
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
 
-        //[Fact]
-        //public async Task WhenNameExceedsMaxLength_ShouldReturnValidationError()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.NameTooLong, MockFieldValues.Description);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    string expectedErrorMessage = ExpectedValidationMessages.NameMustNotExceedMaxLength;
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.NameMaxLength))
-        //        .ReturnsAsync(expectedErrorMessage);
+        [Fact]
+        public async Task WhenNameExceedsMaxLength_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.NameTooLong, MockFieldValues.Description);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            string expectedErrorMessage = ExpectedValidationMessages.NameMustNotExceedMaxLength;
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Errors.Should().ContainSingle(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Name) &&
-        //        e.ErrorMessage == expectedErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.NameMaxLength))
+                .ReturnsAsync(expectedErrorMessage);
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().ContainSingle(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Name) &&
+                e.ErrorMessage == expectedErrorMessage);
 
-        //[Fact]
-        //public async Task WhenDescriptionIsEmpty_ShouldReturnValidationError()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.Name, string.Empty);
-        //    string expectedErrorMessage = ExpectedValidationMessages.DescriptionIsRequired;
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired))
-        //        .ReturnsAsync(expectedErrorMessage);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Errors.Should().ContainSingle(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Description) &&
-        //        e.ErrorMessage == expectedErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+        [Fact]
+        public async Task WhenDescriptionIsEmpty_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.Name, string.Empty);
+            string expectedErrorMessage = ExpectedValidationMessages.DescriptionIsRequired;
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired))
+                .ReturnsAsync(expectedErrorMessage);
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+            // Act
+            var result = await _mediator.Send(command);
 
-        //[Fact]
-        //public async Task WhenDescriptionExceedsMaxLength_ShouldReturnValidationError()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.DescriptionTooLong);
-        //    string expectedErrorMessage = ExpectedValidationMessages.DescriptionMustNotExceedMaxLength;
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().ContainSingle(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Description) &&
+                e.ErrorMessage == expectedErrorMessage);
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength))
-        //        .ReturnsAsync(expectedErrorMessage);
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Errors.Should().ContainSingle(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Description) &&
-        //        e.ErrorMessage == expectedErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
+        [Fact]
+        public async Task WhenDescriptionExceedsMaxLength_ShouldReturnValidationError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.DescriptionTooLong);
+            string expectedErrorMessage = ExpectedValidationMessages.DescriptionMustNotExceedMaxLength;
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength))
+                .ReturnsAsync(expectedErrorMessage);
 
-        //[Fact]
-        //public async Task WhenAllFieldsAreEmpty_ShouldReturnValidationErrors()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(string.Empty, string.Empty);
-        //    string expectedNameErrorMessage = ExpectedValidationMessages.NameIsRequired;
-        //    string expectedDescriptionErrorMessage = ExpectedValidationMessages.DescriptionIsRequired;
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.NameIsRequired))
-        //        .ReturnsAsync(expectedNameErrorMessage);
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired))
-        //        .ReturnsAsync(expectedDescriptionErrorMessage);
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().ContainSingle(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Description) &&
+                e.ErrorMessage == expectedErrorMessage);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Errors.Should().Contain(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Name) &&
-        //        e.ErrorMessage == expectedNameErrorMessage);
-        //    result.ErrorDetails!.Errors.Should().Contain(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Description) &&
-        //        e.ErrorMessage == expectedDescriptionErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+        [Fact]
+        public async Task WhenAllFieldsAreEmpty_ShouldReturnValidationErrors()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(string.Empty, string.Empty);
+            string expectedNameErrorMessage = ExpectedValidationMessages.NameIsRequired;
+            string expectedDescriptionErrorMessage = ExpectedValidationMessages.DescriptionIsRequired;
 
-        //[Fact]
-        //public async Task WhenAllFieldsExceedMaxLength_ShouldReturnValidationErrors()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.NameTooLong, MockFieldValues.DescriptionTooLong);
-        //    string expectedNameErrorMessage = ExpectedValidationMessages.NameMustNotExceedMaxLength;
-        //    string expectedDescriptionErrorMessage = ExpectedValidationMessages.DescriptionMustNotExceedMaxLength;
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.NameIsRequired))
+                .ReturnsAsync(expectedNameErrorMessage);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired))
+                .ReturnsAsync(expectedDescriptionErrorMessage);
 
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.NameMaxLength))
-        //        .ReturnsAsync(expectedNameErrorMessage);
-        //    _mockLocalization
-        //        .Setup(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength))
-        //        .ReturnsAsync(expectedDescriptionErrorMessage);
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().Contain(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Name) &&
+                e.ErrorMessage == expectedNameErrorMessage);
+            result.ErrorDetails.Errors.Should().Contain(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Description) &&
+                e.ErrorMessage == expectedDescriptionErrorMessage);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Errors.Should().Contain(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Name) &&
-        //        e.ErrorMessage == expectedNameErrorMessage);
-        //    result.ErrorDetails!.Errors.Should().Contain(e =>
-        //        e.PropertyName == nameof(BrandCreateCommand.Description) &&
-        //        e.ErrorMessage == expectedDescriptionErrorMessage);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
 
-        //    // Verify
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
-        //    _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-        //}
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //[Fact]
-        //public async Task WhenBrandAlreadyExists_ShouldReturnBadRequest()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
+        [Fact]
+        public async Task WhenAllFieldsExceedMaxLength_ShouldReturnValidationErrors()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.NameTooLong, MockFieldValues.DescriptionTooLong);
+            string expectedNameErrorMessage = ExpectedValidationMessages.NameMustNotExceedMaxLength;
+            string expectedDescriptionErrorMessage = ExpectedValidationMessages.DescriptionMustNotExceedMaxLength;
 
-        //    _mockPosDbUnitOfWork
-        //        .Setup(r => r.BrandRepository.GetByName(MockFieldValues.Name))
-        //        .ReturnsAsync(new Brand { Name = MockFieldValues.Name });
-        //    _mockPosDbUnitOfWork
-        //        .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
-        //        .ReturnsAsync(1);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.NameMaxLength))
+                .ReturnsAsync(expectedNameErrorMessage);
+            _mockLocalization
+                .Setup(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength))
+                .ReturnsAsync(expectedDescriptionErrorMessage);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Message.Should().Be(ExpectedValidationMessages.BrandAlreadyExists);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.BadRequest);
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.BadRequest);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(ValidationMessages.Title);
+            result.ErrorDetails.Message.Should().Be(ValidationMessages.Message);
+            result.ErrorDetails.Errors.Should().Contain(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Name) &&
+                e.ErrorMessage == expectedNameErrorMessage);
+            result.ErrorDetails!.Errors.Should().Contain(e =>
+                e.PropertyName == nameof(BrandCreateCommand.Description) &&
+                e.ErrorMessage == expectedDescriptionErrorMessage);
 
-        //    // Verify
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Once);
+            // Verify
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
+            _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
 
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(MockFieldValues.Name), Times.Once);
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 
-        //    _mockLogger.Verify(x => x.LogWarning(), Times.Once);
-        //}
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
 
-        //[Fact]
-        //public async Task WhenExceptionIsThrown_ShouldReturnInternalServerError()
-        //{
-        //    // Arrange
-        //    var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
+        [Fact]
+        public async Task WhenBrandAlreadyExists_ShouldReturnBadRequest()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
 
-        //    _mockBrandRepository
-        //        .Setup(r => r.GetByName(It.IsAny<string>()))
-        //        .ReturnsAsync((Brand?)null);
+            _mockPosDbUnitOfWork
+                .Setup(r => r.BrandRepository.GetByName(MockFieldValues.Name))
+                .ReturnsAsync(new Brand { Name = MockFieldValues.Name });
+            _mockPosDbUnitOfWork
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
+            _mockLogginMessages
+                .Setup(r => r.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning))
+                .ReturnsAsync(ExpectedValidationMessages.BrandAlreadyExists);
 
-        //    _mockPosDbUnitOfWork
-        //        .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
-        //        .ThrowsAsync(new Exception(ExpectedValidationMessages.DatabaseError));
+            // Act
+            var result = await _mediator.Send(command);
 
-        //    // Act
-        //    var result = await _mediator.Send(command);
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.Conflict);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(nameof(HttpStatusCode.Conflict));
+            result.ErrorDetails.Message.Should().Be(ExpectedValidationMessages.BrandAlreadyExists);
+            result.ErrorDetails.Errors.Should().BeNull();
 
-        //    // Assert
-        //    result.IsSuccess.Should().BeFalse();
-        //    result.ErrorDetails.Should().NotBeNull();
-        //    result.ErrorDetails!.Message.Should().Be(ExpectedValidationMessages.DatabaseError);
-        //    result.ErrorDetails.Status.Should().Be(HttpStatusCode.InternalServerError);
+            // Verify
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Once);
 
-        //    // Verify
-        //    _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Once);
-        //    _mockBrandRepository.Verify(r => r.GetByName(It.IsAny<string>()), Times.Once);
-        //    _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
-        //    _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-        //    _mockLogger.Verify(x => x.Log(
-        //        LogLevel.Error,
-        //        It.IsAny<EventId>(),
-        //        It.IsAny<It.IsAnyType>(),
-        //        It.IsAny<Exception>(),
-        //        It.IsAny<Func<It.IsAnyType, Exception?, string>>()), Times.Once);
-        //}
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(MockFieldValues.Name), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Once);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Never);
+        }
+
+        [Fact]
+        public async Task WhenExceptionIsThrown_ShouldReturnInternalServerError()
+        {
+            // Arrange
+            var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
+
+            _mockPosDbUnitOfWork
+                .Setup(r => r.BrandRepository.GetByName(MockFieldValues.Name))
+                .ReturnsAsync((Brand?)null);
+            _mockPosDbUnitOfWork
+                .Setup(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception(ExpectedValidationMessages.DatabaseError));
+            _mockLogginMessages
+                .Setup(r => r.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error))
+                .ReturnsAsync(ExpectedValidationMessages.DatabaseError);
+
+            // Act
+            var result = await _mediator.Send(command);
+
+            // Assert
+            result.Value.Should().BeEmpty();
+            result.Status.Should().Be(HttpStatusCode.InternalServerError);
+            result.ErrorDetails.Should().NotBeNull();
+            result.ErrorDetails.Title.Should().Be(nameof(HttpStatusCode.InternalServerError));
+            result.ErrorDetails.Message.Should().Be(ExpectedValidationMessages.DatabaseError);
+            result.ErrorDetails.Errors.Should().BeNull();
+
+            // Verify
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Exactly(2));
+
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(MockFieldValues.Name), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
+            _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.AlreadyExists, MockFieldValues.Name, LogLevel.Warning), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogginMessages.Verify(u => u.Handle(BrandCachedKeys.ErrorCreating, MockFieldValues.Name, LogLevel.Error), Times.Once);
+        }
     }
 }

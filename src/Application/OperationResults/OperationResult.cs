@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Behaviors;
+using MediatR;
 using System.Net;
 
 namespace Application.OperationResults
@@ -30,8 +31,8 @@ namespace Application.OperationResults
         {
             var errorDetails = new ErrorDetails
             {
-                Title = "Validation Failed",
-                Message = "Error en validaciones",
+                Title = ValidationMessages.Title,
+                Message = ValidationMessages.Message,
                 Errors = errors
             };
 
@@ -39,19 +40,19 @@ namespace Application.OperationResults
         }
 
         public static OperationResult<Unit> Conflict(string message)
-            => CreateResultWithErrors(HttpStatusCode.Conflict, title: "Conflict", message);
+            => CreateResultWithErrors(HttpStatusCode.Conflict, title: nameof(HttpStatusCode.Conflict), message);
 
         public static OperationResult<Unit> BadRequest(string message)
-            => CreateResultWithErrors(HttpStatusCode.BadRequest, title: "Bad Request", message);
+            => CreateResultWithErrors(HttpStatusCode.BadRequest, title: nameof(HttpStatusCode.BadRequest), message);
 
         public static OperationResult<Unit> NotFound(string message)
-            => CreateResultWithErrors(HttpStatusCode.NotFound, title: "Not Found", message);
+            => CreateResultWithErrors(HttpStatusCode.NotFound, title: nameof(HttpStatusCode.NotFound), message);
 
         public static OperationResult<Unit> InternalServerError(string message)
-            => CreateResultWithErrors(HttpStatusCode.InternalServerError, title: "Internal Server Error", message);
+            => CreateResultWithErrors(HttpStatusCode.InternalServerError, title: nameof(HttpStatusCode.InternalServerError), message);
 
         public static OperationResult<Unit> Unauthorized(string message)
-            => CreateResultWithErrors(HttpStatusCode.Unauthorized, title: "Unauthorized", message);
+            => CreateResultWithErrors(HttpStatusCode.Unauthorized, title: nameof(HttpStatusCode.Unauthorized), message);
 
         private static OperationResult<Unit> CreateResultWithErrors(HttpStatusCode statucCode, string title, string message)
             => new(

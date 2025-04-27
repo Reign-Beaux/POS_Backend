@@ -6,6 +6,12 @@ using MediatR;
 
 namespace Application.Behaviors
 {
+    public static class ValidationMessages
+    {
+        public const string Title = "Validation Failed";
+        public const string Message = "Error in validations.";
+    }
+
     public class ValidationBehavior<TRequest, TResponse>(
         ILocalizationCached localization,
         IValidator<TRequest>? validator = null) : IPipelineBehavior<TRequest, TResponse>

@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces.UnitOfWorks;
-using Application.Features.Brands.Commands.Delete;
+using Application.Features.Brands.UseCases.Commands.Delete;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
 using System.Net;

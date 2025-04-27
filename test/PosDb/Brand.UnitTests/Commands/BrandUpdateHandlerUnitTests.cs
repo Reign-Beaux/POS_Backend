@@ -1,6 +1,6 @@
 ﻿using Application.Behaviors;
 using Application.Interfaces.UnitOfWorks;
-using Application.Features.Brands.Commands.Update;
+using Application.Features.Brands.UseCases.Commands.Update;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
 using System.Net;

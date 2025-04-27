@@ -1,5 +1,5 @@
 ﻿using Application.Features.Brands.DTOs;
-using Application.Features.Brands.Queries.GetAll;
+using Application.Features.Brands.UseCases.Queries.GetAll;
 using Application.Interfaces.UnitOfWorks;
 using Domain.Entities.Brands;
 using Microsoft.Extensions.Logging;
