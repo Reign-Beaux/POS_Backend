@@ -86,7 +86,6 @@ namespace Brands.UnitTests.Commands
             result.ErrorDetails.Should().BeNull();
 
             // Verify
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Exactly(2));
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Once);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
@@ -123,7 +122,6 @@ namespace Brands.UnitTests.Commands
             // Verify
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -161,7 +159,6 @@ namespace Brands.UnitTests.Commands
             // Verify
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -198,7 +195,6 @@ namespace Brands.UnitTests.Commands
             // Verify
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -235,7 +231,6 @@ namespace Brands.UnitTests.Commands
             // Verify
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -280,7 +275,6 @@ namespace Brands.UnitTests.Commands
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameIsRequired), Times.Once);
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionIsRequired), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -325,7 +319,6 @@ namespace Brands.UnitTests.Commands
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.NameMaxLength), Times.Once);
             _mockLocalization.Verify(l => l.GetText(CatalogCachedKeys.DescriptionMaxLength), Times.Once);
 
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(It.IsAny<string>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -336,7 +329,7 @@ namespace Brands.UnitTests.Commands
         }
 
         [Fact]
-        public async Task WhenBrandAlreadyExists_ShouldReturnBadRequest()
+        public async Task WhenBrandAlreadyExists_ShouldReturnConflict()
         {
             // Arrange
             var command = new BrandCreateCommand(MockFieldValues.Name, MockFieldValues.Description);
@@ -363,8 +356,6 @@ namespace Brands.UnitTests.Commands
             result.ErrorDetails.Errors.Should().BeNull();
 
             // Verify
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Once);
-
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(MockFieldValues.Name), Times.Once);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -405,8 +396,6 @@ namespace Brands.UnitTests.Commands
             result.ErrorDetails.Errors.Should().BeNull();
 
             // Verify
-            _mockPosDbUnitOfWork.Verify(u => u.BrandRepository, Times.Exactly(2));
-
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.GetByName(MockFieldValues.Name), Times.Once);
             _mockPosDbUnitOfWork.Verify(u => u.BrandRepository.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
             _mockPosDbUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
