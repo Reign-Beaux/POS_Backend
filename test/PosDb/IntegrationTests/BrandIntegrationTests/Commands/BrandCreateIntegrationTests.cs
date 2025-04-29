@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace BrandIntegrationTests.Commands
 {
-    public class BrandCreateIntegrationTestss(POSWebApplicationFactory factory) : IClassFixture<POSWebApplicationFactory>
+    public class BrandCreateIntegrationTests(POSWebApplicationFactory factory) : IClassFixture<POSWebApplicationFactory>
     {
         private readonly HttpClient _client = factory.CreateClient();
 
