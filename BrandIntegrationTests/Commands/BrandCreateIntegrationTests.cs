@@ -2,8 +2,8 @@
 using Application.Features.Brands.UseCases.Commands.Create;
 using BaseTests.Factories;
 using FluentAssertions;
-using System.Net.Http.Json;
 using System.Net;
+using System.Net.Http.Json;
 
 namespace BrandIntegrationTests.Commands
 {
