@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Hosting;
+using Web.API;
 
-namespace Web.API.Integrations
+namespace BaseTests.Factories
 {
     public class POSWebApplicationFactory : WebApplicationFactory<Program>
     {

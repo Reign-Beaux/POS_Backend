@@ -2,12 +2,12 @@
 using Application.Features.Brands.UseCases.Commands.Create;
 using BaseTests.Factories;
 using FluentAssertions;
-using System.Net;
 using System.Net.Http.Json;
+using System.Net;
 
-namespace Web.API.Integrations
+namespace BrandIntegrationTests.Commands
 {
-    public class BrandControllerIntegrationTests(POSWebApplicationFactory factory) : IClassFixture<POSWebApplicationFactory>
+    public class BrandCreateIntegrationTests(POSWebApplicationFactory factory) : IClassFixture<POSWebApplicationFactory>
     {
         private readonly HttpClient _client = factory.CreateClient();
 
