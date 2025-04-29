@@ -18,7 +18,7 @@ namespace Application.Features.Brands.UseCases.Queries.GetById
             try
             {
                 Brand? brand = await posDb.BrandRepository.GetById(request.Id);
-                if (brand == null)
+                if (brand is null)
                 {
                     logger.LogWarning("Brand with ID {Id} not found", request.Id);
                     return OperationResult.NotFound($"Brand with ID {request.Id} not found.");

@@ -51,7 +51,7 @@ namespace Web.API.Controllers
             if (operationResult.Status != HttpStatusCode.Created)
                 return HandleErrorResponse(operationResult);
 
-            return CreatedAtAction(nameof(GetById), new { id = operationResult.Value });
+            return CreatedAtAction(nameof(GetById), new { id = operationResult.Value }, operationResult.Value);
         }
 
         //[HttpPut]
