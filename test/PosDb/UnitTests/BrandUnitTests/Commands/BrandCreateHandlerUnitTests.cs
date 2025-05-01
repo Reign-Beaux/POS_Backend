@@ -27,7 +27,7 @@ namespace BrandUnitTests.Commands
         // */
 
         [Fact]
-        public async Task WhenAllIsOk_ShouldReturnSuccess()
+        public async Task WhenAllIsOk_ShouldReturnCreated()
         {
             // Arrange
             var name = "Test Brand";

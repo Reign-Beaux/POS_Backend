@@ -12,10 +12,10 @@ namespace BrandIntegrationTests.Commands
         private readonly HttpClient _client = factory.CreateClient();
 
         [Fact]
-        public async Task Post_Brand_WithValidData_ShouldReturnCreated()
+        public async Task WhenAllIsOk_ShouldReturnCreated()
         {
             // Arrange
-            var command = new BrandCreateCommand("Nueva Marca Test", "Descripción de prueba");
+            var command = new BrandCreateCommand($"Test name {Guid.NewGuid()}", "Descripción de prueba");
             const string requestUri = "/api/Brand";
 
             // Act
@@ -31,8 +31,10 @@ namespace BrandIntegrationTests.Commands
             var createdBrandId = await response.Content.ReadFromJsonAsync<Guid>();
             createdBrandId.Should().NotBeEmpty();
 
-            // Confirmar que el recurso efectivamente existe
+            // Additional Act
             var getResponse = await _client.GetAsync($"{requestUri}/{createdBrandId}");
+
+            // Additional Assert
             getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var brand = await getResponse.Content.ReadFromJsonAsync<BrandDTO>();
