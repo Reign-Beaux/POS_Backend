@@ -6,7 +6,7 @@ using Domain.Entities.Brands;
 
 namespace BrandUnitTests.Commands
 {
-    public class BrandCreateHandlerUnitTests
+    public class BrandCreateHandlerUnitTests    
     {
         private readonly Mock<IPosDbUnitOfWork> _mockUnitOfWork = new();
         private readonly Mock<ILoggingMessagesService<BrandCreateHandler>> _mockLogger = new();
