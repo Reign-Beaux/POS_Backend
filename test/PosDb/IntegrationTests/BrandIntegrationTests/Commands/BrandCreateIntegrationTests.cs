@@ -39,7 +39,7 @@ namespace BrandIntegrationTests.Commands
 
             var brand = await getResponse.Content.ReadFromJsonAsync<BrandDTO>();
             brand.Should().NotBeNull();
-            brand!.Id.Should().Be(createdBrandId);
+            brand.Id.Should().Be(createdBrandId);
             brand.Name.Should().Be(command.Name);
             brand.Description.Should().Be(command.Description);
         }
