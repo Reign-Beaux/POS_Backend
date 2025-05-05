@@ -1,4 +1,6 @@
-﻿using Application.Features.Brands.UseCases.Commands.Create;
+﻿using Application.Features.Brands.DTOs;
+using Application.Features.Brands.UseCases.Commands.Create;
+using Application.Features.Brands.UseCases.Queries.GetAll;
 using Application.OperationResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +14,22 @@ namespace Web.API.Controllers
     {
         private const string routeTemplateId = "{id:Guid}";
 
-        //[HttpGet(routeTemplateId)]
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<BrandDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetAll()
+        {
+            BrandGetAllQuery query = new();
+            var operationResult = await sender.Send(query);
+
+            if (operationResult.Status != HttpStatusCode.OK)
+                return HandleErrorResponse(operationResult);
+
+            return Ok(operationResult.Value);
+        }
+
+        [HttpGet(routeTemplateId)]
         //[ProducesResponseType(typeof(CatalogDTO), (int)HttpStatusCode.OK)]
         //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
