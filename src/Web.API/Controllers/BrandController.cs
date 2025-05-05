@@ -1,14 +1,11 @@
-﻿using Application.OperationResults;
-using Application.Features.Brands.UseCases.Commands.Delete;
-using Application.Features.Brands.UseCases.Commands.Update;
-using Application.Features.Brands.UseCases.Queries.GetAll;
+﻿using Application.Features.Brands.DTOs;
+using Application.Features.Brands.UseCases.Commands.Create;
 using Application.Features.Brands.UseCases.Queries.GetById;
+using Application.OperationResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Web.API.Controllers.Base;
-using Application.Features.Brands.DTOs;
-using Application.Features.Brands.UseCases.Commands.Create;
 
 namespace Web.API.Controllers
 {
@@ -16,14 +13,6 @@ namespace Web.API.Controllers
     public class BrandController(ISender sender) : ControllerAbstraction
     {
         private const string routeTemplateId = "{id:Guid}";
-
-        //[HttpGet]
-        //[ProducesResponseType(typeof(IEnumerable<BrandDTO>), (int)HttpStatusCode.OK)]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    var operationResult = await sender.Send(new BrandGetAllQuery());
-        //    return HandleResponse(operationResult);
-        //}
 
         [HttpGet(routeTemplateId)]
         [ProducesResponseType(typeof(BrandDTO), (int)HttpStatusCode.OK)]
@@ -54,23 +43,5 @@ namespace Web.API.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = operationResult.Value }, operationResult.Value);
         }
-
-        //[HttpPut]
-        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
-        //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
-        //public async Task<IActionResult> Update([FromBody] BrandUpdateCommand command)
-        //{
-        //    var operationResult = await sender.Send(command);
-        //    return HandleResponse(operationResult);
-        //}
-
-        //[HttpDelete(routeTemplateId)]
-        //[ProducesResponseType((int)HttpStatusCode.NoContent)]
-        //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
-        //public async Task<IActionResult> Delete(Guid id)
-        //{
-        //    var operationResult = await sender.Send(new BrandDeleteCommand(id));
-        //    return HandleResponse(operationResult);
-        //}
     }
 }
