@@ -1,8 +1,8 @@
-﻿using Application.OperationResults;
-using Application.Shared.Catalogs;
+﻿using Application.Features.Brands.DTOs;
+using Application.OperationResults;
 using MediatR;
 
 namespace Application.Features.Brands.UseCases.Commands.Create
 {
-    public record BrandCreateCommand : CatalogDTOAbstraction, IRequest<OperationResult<Guid>>;
+    public record BrandCreateCommand : BrandDTO, IRequest<OperationResult<Guid>>;
 }

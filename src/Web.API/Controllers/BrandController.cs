@@ -1,7 +1,5 @@
 ﻿using Application.Features.Brands.UseCases.Commands.Create;
-using Application.Features.Brands.UseCases.Queries.GetById;
 using Application.OperationResults;
-using Application.Shared.Catalogs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -14,10 +12,10 @@ namespace Web.API.Controllers
     {
         private const string routeTemplateId = "{id:Guid}";
 
-        [HttpGet(routeTemplateId)]
-        [ProducesResponseType(typeof(CatalogDTO), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
+        //[HttpGet(routeTemplateId)]
+        //[ProducesResponseType(typeof(CatalogDTO), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
+        //[ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetById(Guid id)
         {
             //BrandGetByIdQuery query = new(id);

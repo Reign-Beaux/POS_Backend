@@ -1,6 +1,6 @@
 ﻿namespace Application.Shared.Catalogs
 {
-    public class CatalogDTOAbstraction
+    public abstract record CatalogDTOAbstraction
     {
         public Guid? Id { get; init; } = null;
         public string Name { get; init; } = string.Empty;
