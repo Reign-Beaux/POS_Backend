@@ -6,6 +6,6 @@ namespace Application.Interfaces.Services
     {
         Task<string> Handle(string localizationKey, string name, LogLevel logLevel);
         Task<string> Handle(string localizationKey, LogLevel logLevel);
-        Task<string> HandleExceptionMessage(string localizationKey, string value, Exception exception);
+        Task<string> HandleExceptionMessage(string localizationKey, Exception exception);
     }
 }

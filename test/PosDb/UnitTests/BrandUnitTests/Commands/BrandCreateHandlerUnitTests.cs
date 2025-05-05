@@ -49,7 +49,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.GetByName(name), Times.Once);
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Once);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, command.Name, It.IsAny<Exception>()), Times.Never);
+            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Once);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Never);
         }
@@ -83,7 +83,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.GetByName(name), Times.Once);
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, command.Name, It.IsAny<Exception>()), Times.Never);
+            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Once);
         }
@@ -101,7 +101,7 @@ namespace BrandUnitTests.Commands
 
             var expectedMessage = "Unexpected error.";
             _mockLogger
-                .Setup(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, command.Name, It.IsAny<Exception>()))
+                .Setup(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()))
                 .ReturnsAsync(expectedMessage);
 
             // Act
@@ -119,7 +119,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.GetByName(name), Times.Once);
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>(), It.IsAny<CancellationToken>()), Times.Never);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, command.Name, It.IsAny<Exception>()), Times.Once);
+            _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Once);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Never);
         }

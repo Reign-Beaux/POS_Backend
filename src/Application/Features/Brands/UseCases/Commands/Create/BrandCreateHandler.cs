@@ -37,7 +37,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
             }
             catch (Exception ex)
             {
-                string message = await logginMessagesService.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, request.Name, ex);
+                string message = await logginMessagesService.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, ex);
                 return OperationResult.InternalServerError(message);
             }
         }

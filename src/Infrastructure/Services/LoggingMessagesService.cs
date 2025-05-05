@@ -50,7 +50,7 @@ namespace Infrastructure.Services
             }
         }
 
-        public async Task<string> HandleExceptionMessage(string localizationKey, string value, Exception exception)
+        public async Task<string> HandleExceptionMessage(string localizationKey, Exception exception)
         {
             try
             {
