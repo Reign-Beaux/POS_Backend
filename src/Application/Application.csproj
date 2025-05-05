@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Brands\UseCases\Commands\" />
+    <Folder Include="Features\Brands\UseCases\Queries\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 

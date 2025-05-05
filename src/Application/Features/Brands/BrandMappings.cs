@@ -1,4 +1,4 @@
-﻿using Application.Features.Brands.DTOs;
+﻿using Application.Features.Brands.UseCases.Commands.Create;
 using AutoMapper;
 using Domain.Entities.Brands;
 
@@ -8,7 +8,7 @@ namespace Application.Features.Brands
     {
         public BrandMappings()
         {
-            CreateMap<Brand, BrandDTO>();
+            CreateMap<BrandCreateCommand, Brand>();
         }
     }
 }

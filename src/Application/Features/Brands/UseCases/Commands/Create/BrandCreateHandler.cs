@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
+using AutoMapper;
 using Domain.Entities.Brands;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
 {
     public sealed class BrandCreateHandler(
         ILoggingMessagesService<BrandCreateHandler> logginMessagesService,
+        IMapper mapper,
         IPosDbUnitOfWork posDb) : IRequestHandler<BrandCreateCommand, OperationResult<Guid>>
     {
         public async Task<OperationResult<Guid>> Handle(BrandCreateCommand request, CancellationToken cancellationToken)
@@ -22,11 +24,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
                     return OperationResult.Conflict(message);
                 }
 
-                Brand brand = new()
-                {
-                    Name = request.Name,
-                    Description = request.Description
-                };
+                var brand = mapper.Map<Brand>(request);
 
                 posDb.BrandRepository.Add(brand, cancellationToken);
                 await posDb.SaveChangesAsync(cancellationToken);

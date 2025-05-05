@@ -1,7 +1,7 @@
-﻿using Application.Features.Brands.DTOs;
-using Application.Features.Brands.UseCases.Commands.Create;
+﻿using Application.Features.Brands.UseCases.Commands.Create;
 using Application.Features.Brands.UseCases.Queries.GetById;
 using Application.OperationResults;
+using Application.Shared.Catalogs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -15,18 +15,19 @@ namespace Web.API.Controllers
         private const string routeTemplateId = "{id:Guid}";
 
         [HttpGet(routeTemplateId)]
-        [ProducesResponseType(typeof(BrandDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(CatalogDTO), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetById(Guid id)
         {
-            BrandGetByIdQuery query = new(id);
-            var operationResult = await sender.Send(query);
+            //BrandGetByIdQuery query = new(id);
+            //var operationResult = await sender.Send(query);
 
-            if (operationResult.Status != HttpStatusCode.OK)
-                return HandleErrorResponse(operationResult);
+            //if (operationResult.Status != HttpStatusCode.OK)
+            //    return HandleErrorResponse(operationResult);
 
-            return Ok(operationResult.Value);
+            //return Ok(operationResult.Value);
+            return Ok();
         }
 
         [HttpPost]
