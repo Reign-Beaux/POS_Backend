@@ -17,13 +17,13 @@ namespace Infrastructure.Persistence.Repositories
         public Task<Brand?> GetByName(string name)
             => _context.Brands.SingleOrDefaultAsync(brand => brand.Name == name && !brand.IsDeleted);
 
-        public void Add(Brand brand, CancellationToken cancellationToken = default)
+        public void Add(Brand brand)
             => _context.Brands.Add(brand);
 
-        public void Update(Brand brand, CancellationToken cancellationToken = default)
+        public void Update(Brand brand)
             => _context.Brands.Update(brand);
 
-        public void Delete(Brand brand, CancellationToken cancellationToken = default)
+        public void Delete(Brand brand)
             => _context.Brands.Remove(brand);
     }
 }

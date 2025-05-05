@@ -26,7 +26,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
 
                 var brand = mapper.Map<Brand>(request);
 
-                posDb.BrandRepository.Add(brand, cancellationToken);
+                posDb.BrandRepository.Add(brand);
                 await posDb.SaveChangesAsync(cancellationToken);
 
                 await logginMessagesService.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information);
