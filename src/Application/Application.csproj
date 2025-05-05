@@ -21,9 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
-    <Folder Include="Features\Articles\Commands\Delete\" />
-    <Folder Include="Features\Articles\Commands\Update\" />
-    <Folder Include="Features\Articles\Queries\GetById\" />
   </ItemGroup>
 
 </Project>
