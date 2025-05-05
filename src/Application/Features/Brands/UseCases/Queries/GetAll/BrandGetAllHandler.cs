@@ -1,15 +1,15 @@
 ﻿using Application.Features.Brands.DTOs;
+using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
 using Application.OperationResults;
 using AutoMapper;
 using Domain.Entities.Brands;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Brands.UseCases.Queries.GetAll
 {
     public sealed class BrandGetAllHandler(
-        ILogger<BrandGetAllHandler> logger,
+        ILoggingMessagesService<BrandGetAllHandler> logginMessagesService,
         IMapper mapper,
         IPosDbUnitOfWork posDb) : IRequestHandler<BrandGetAllQuery, OperationResult<IEnumerable<BrandDTO>>>
     {
@@ -23,8 +23,8 @@ namespace Application.Features.Brands.UseCases.Queries.GetAll
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error retrieving all brands");
-                return OperationResult.InternalServerError(ex.Message);
+                string message = await logginMessagesService.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, request.Name, ex);
+                return OperationResult.InternalServerError(message);
             }
         }
     }
