@@ -64,7 +64,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>()), Times.Once);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Never);
-            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Once);
+            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.Created, LogLevel.Information), Times.Once);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Never);
         }
 
@@ -102,7 +102,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>()), Times.Never);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
             _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Never);
-            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.Created, LogLevel.Information), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Once);
         }
 
@@ -143,7 +143,7 @@ namespace BrandUnitTests.Commands
             _mockBrandRepository.Verify(r => r.Add(It.IsAny<Brand>()), Times.Never);
             _mockUnitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
             _mockLogger.Verify(l => l.HandleExceptionMessage(BrandCachedKeys.ErrorCreating, It.IsAny<Exception>()), Times.Once);
-            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information), Times.Never);
+            _mockLogger.Verify(l => l.Handle(BrandCachedKeys.Created, LogLevel.Information), Times.Never);
             _mockLogger.Verify(l => l.Handle(BrandCachedKeys.AlreadyExists, name, LogLevel.Warning), Times.Never);
         }
     }

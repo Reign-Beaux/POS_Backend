@@ -29,7 +29,7 @@ namespace Application.Features.Brands.UseCases.Commands.Create
                 posDb.BrandRepository.Add(brand);
                 await posDb.SaveChangesAsync(cancellationToken);
 
-                await logginMessagesService.Handle(BrandCachedKeys.CreatedSuccessfully, LogLevel.Information);
+                await logginMessagesService.Handle(BrandCachedKeys.Created, LogLevel.Information);
 
                 return OperationResult.CreatedAtAction(brand.Id);
             }

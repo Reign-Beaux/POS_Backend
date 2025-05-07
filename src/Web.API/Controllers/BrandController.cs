@@ -1,5 +1,6 @@
 ﻿using Application.Features.Brands.DTOs;
 using Application.Features.Brands.UseCases.Commands.Create;
+using Application.Features.Brands.UseCases.Commands.Update;
 using Application.Features.Brands.UseCases.Queries.GetAll;
 using Application.Features.Brands.UseCases.Queries.GetById;
 using Application.OperationResults;
@@ -58,6 +59,21 @@ namespace Web.API.Controllers
                 return HandleErrorResponse(operationResult);
 
             return CreatedAtAction(nameof(GetById), new { id = operationResult.Value }, operationResult.Value);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(typeof(Unit), (int)HttpStatusCode.NoContent)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Update([FromBody] BrandUpdateCommand command)
+        {
+            var operationResult = await sender.Send(command);
+
+            if (operationResult.Status != HttpStatusCode.NoContent)
+                return HandleErrorResponse(operationResult);
+
+            return NoContent();
         }
     }
 }
