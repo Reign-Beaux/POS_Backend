@@ -13,6 +13,7 @@ namespace BrandIntegrationTests.Commands
     public class BrandCreateIntegrationTests(POSWebApplicationFactory factory) : IClassFixture<POSWebApplicationFactory>
     {
         private readonly HttpClient _client = factory.CreateClient();
+        private const string RequestBaseUri = "/api/Brand";
 
         [Fact]
         public async Task WhenAllIsOk_ShouldReturnCreated()
@@ -23,10 +24,9 @@ namespace BrandIntegrationTests.Commands
                 Name = $"Test name {Guid.NewGuid()}",
                 Description = "Test description"
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Created);
@@ -39,7 +39,7 @@ namespace BrandIntegrationTests.Commands
             createdBrandId.Should().NotBeEmpty();
 
             // Additional Act
-            var getResponse = await _client.GetAsync($"{requestUri}/{createdBrandId}");
+            var getResponse = await _client.GetAsync($"{RequestBaseUri}/{createdBrandId}");
 
             // Additional Assert
             getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -60,10 +60,9 @@ namespace BrandIntegrationTests.Commands
                 Name = string.Empty,
                 Description = "Test description"
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -87,10 +86,9 @@ namespace BrandIntegrationTests.Commands
                 Name = NameTooLong,
                 Description = "Test description"
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -113,10 +111,9 @@ namespace BrandIntegrationTests.Commands
                 Name = "Test name",
                 Description = string.Empty
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -140,10 +137,9 @@ namespace BrandIntegrationTests.Commands
                 Name = "Test name",
                 Description = DescriptionTooLong
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -166,10 +162,9 @@ namespace BrandIntegrationTests.Commands
                 Name = string.Empty,
                 Description = string.Empty
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -197,10 +192,9 @@ namespace BrandIntegrationTests.Commands
                 Name = NameTooLong,
                 Description = DescriptionTooLong
             };
-            const string requestUri = "/api/Brand";
 
             // Act
-            HttpResponseMessage response = await _client.PostAsJsonAsync(requestUri, command);
+            HttpResponseMessage response = await _client.PostAsJsonAsync(RequestBaseUri, command);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -221,8 +215,7 @@ namespace BrandIntegrationTests.Commands
         public async Task WhenBrandAlreadyExists_ShouldReturnConflict()
         {
             // Arrange: Obtener todos los brands
-            const string requestUri = "/api/Brand";
-            var getAllResponse = await _client.GetAsync(requestUri);
+            var getAllResponse = await _client.GetAsync(RequestBaseUri);
             getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var brands = await getAllResponse.Content.ReadFromJsonAsync<List<BrandDTO>>();
@@ -238,7 +231,7 @@ namespace BrandIntegrationTests.Commands
             };
 
             // Act: Intentar crear una marca con los mismos datos
-            var postResponse = await _client.PostAsJsonAsync(requestUri, duplicateCommand);
+            var postResponse = await _client.PostAsJsonAsync(RequestBaseUri, duplicateCommand);
 
             // Assert
             postResponse.StatusCode.Should().Be(HttpStatusCode.Conflict);
