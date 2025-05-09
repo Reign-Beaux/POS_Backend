@@ -10,7 +10,7 @@ namespace Application.Features.Brands.UseCases.Commands.Update
         {
             RuleFor(x => x.Id)
                 .NotEmpty()
-                .WithMessage("Brand ID is required.");
+                .WithMessage(BrandCachedKeys.IdIsRequired);
             RuleFor(x => x.Name)
                 .NotEmpty()
                 .WithMessage(CatalogCachedKeys.NameIsRequired)

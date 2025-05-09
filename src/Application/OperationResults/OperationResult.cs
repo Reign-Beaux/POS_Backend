@@ -27,6 +27,9 @@ namespace Application.OperationResults
         public static OperationResult<TValue> CreatedAtAction<TValue>(TValue value)
             => new(HttpStatusCode.Created, value: value);
 
+        public static OperationResult<Unit> NoContent()
+            => new(HttpStatusCode.NoContent);
+
         public static OperationResult<Unit> Validations(List<ValidationError> errors)
         {
             var errorDetails = new ErrorDetails

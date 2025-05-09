@@ -29,7 +29,7 @@ namespace Application.Features.Brands.UseCases.Commands.Update
 
                 await posDb.SaveChangesAsync(cancellationToken);
                 await logginMessagesService.Handle(BrandCachedKeys.Updated, request.Name, LogLevel.Information);    
-                return OperationResult.Success();
+                return OperationResult.NoContent();
             }
             catch (Exception ex)
             {
