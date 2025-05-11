@@ -4,7 +4,9 @@
     {
         public const string AlreadyExists = "Brand_AlreadyExists";
         public const string Created = "Brand_Created";
+        public const string Deleted = "Brand_Deleted";
         public const string ErrorCreating = "Brand_ErrorCreating";
+        public const string ErrorDeleting = "Brand_ErrorDeleting";
         public const string ErrorUpdating = "Brand_ErrorUpdating";
         public const string IdIsRequired = "Brand_IdIsRequired";
         public const string Updated = "Brand_Updated";
