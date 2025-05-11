@@ -2,7 +2,6 @@
 using Application.Features.Brands.UseCases.Commands.Delete;
 using Application.Interfaces.Services;
 using Application.Interfaces.UnitOfWorks;
-using Azure.Core;
 using Domain.Entities.Brands;
 
 namespace BrandUnitTests.Commands
