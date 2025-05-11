@@ -17,7 +17,7 @@ namespace Application.Features.Brands.UseCases.Commands.Delete
                 var brand = await posDb.BrandRepository.GetById(request.Id);
                 if (brand is null)
                 {
-                    string message = await logginMessagesService.Handle(BrandCachedKeys.NotFound, brand.Name, LogLevel.Warning);
+                    string message = await logginMessagesService.Handle(BrandCachedKeys.NotFound, request.Id.ToString(), LogLevel.Warning);
                     return OperationResult.NotFound(message);
                 }
 
