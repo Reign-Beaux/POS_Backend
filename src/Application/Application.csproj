@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\ArticleTypes\UseCases\Commands\Delete\" />
+    <Folder Include="Features\ArticleTypes\UseCases\Commands\Update\" />
+    <Folder Include="Features\ArticleTypes\UseCases\Queries\GetAll\" />
+    <Folder Include="Features\ArticleTypes\UseCases\Queries\GetById\" />
     <Folder Include="Helpers\" />
   </ItemGroup>
 
